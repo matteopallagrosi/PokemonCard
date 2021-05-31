@@ -1,4 +1,4 @@
-package it.matteopallagrosi.pokemoncard
+package it.fasm.pokemoncard
 
 import org.junit.Test
 

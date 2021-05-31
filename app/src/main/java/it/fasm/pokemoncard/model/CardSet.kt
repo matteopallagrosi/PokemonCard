@@ -1,4 +1,4 @@
-package it.matteopallagrosi.pokemoncard.model
+package it.fasm.pokemoncard.model
 
 data class CardSet(
     val id: String,

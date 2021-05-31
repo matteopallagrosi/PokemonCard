@@ -1,4 +1,4 @@
-package it.matteopallagrosi.pokemoncard.model
+package it.fasm.pokemoncard.model
 
 enum class SubType(internal var text: String? = null) {
     BABY("Baby"),

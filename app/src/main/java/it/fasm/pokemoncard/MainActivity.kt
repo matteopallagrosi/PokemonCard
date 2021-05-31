@@ -1,4 +1,4 @@
-package it.matteopallagrosi.pokemoncard
+package it.fasm.pokemoncard
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package it.matteopallagrosi.pokemoncard.model
+package it.fasm.pokemoncard.model
 
 import com.google.gson.annotations.SerializedName
 

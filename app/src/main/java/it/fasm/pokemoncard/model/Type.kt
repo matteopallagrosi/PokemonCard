@@ -1,4 +1,4 @@
-package it.matteopallagrosi.pokemoncard.model
+package it.fasm.pokemoncard.model
 
 enum class Type(internal var text: String? = null) {
     COLORLESS,

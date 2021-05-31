@@ -1,4 +1,4 @@
-package it.matteopallagrosi.pokemoncard.model
+package it.fasm.pokemoncard.model
 
 enum class SuperType(internal var text: String? = null) {
     ENERGY("Energy"),
