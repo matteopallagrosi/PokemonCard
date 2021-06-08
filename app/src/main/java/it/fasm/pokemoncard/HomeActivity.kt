@@ -9,18 +9,24 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import it.fasm.pokemoncard.databinding.ActivityHomeBinding
 import it.fasm.pokemoncard.databinding.ActivityMainBinding
+import it.fasm.pokemoncard.model.Card
+import org.json.JSONObject
 import kotlin.jvm.Throws
 
 
-class MainActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    var string: String = "ciao"
+    private lateinit var binding:ActivityHomeBinding
+
+    private var response = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         prova()
     }
@@ -28,18 +34,8 @@ class MainActivity : AppCompatActivity() {
 
     fun prova() {
 
-        /*@Throws(AuthFailureError::class)
-        fun getHeaders(): Map<String, String>? {
-            //val params: MutableMap<String, String> =
-            //    HashMap()
-            //params["Content-Type"] = "application/json; charset=UTF-8"
-            //params["token"] = "99967d70-c1ae-4dcb-a297-6d613706472d"
-            val headers: HashMap<String, String> = HashMap()
-            headers.put("X-Api-Key", "99967d70-c1ae-4dcb-a297-6d613706472d")
-            return headers
-        } */
-
-        val url = "https://api.pokemontcg.io/v2/cards"
+        //val url = "https://api.pokemontcg.io/v2/cards/xy7-54"
+        val url = "https://api.pokemontcg.io/v2/sets"
 
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(this)
@@ -48,9 +44,21 @@ class MainActivity : AppCompatActivity() {
         val jsonObjectRequest = object : StringRequest(Request.Method.GET, url,
             Response.Listener{ response ->
                 println(response.toString())
+
+                /*var jo = JSONObject(response)
+                //var ja = jo.getJSONObject("data")
+                var ja = jo.getJSONArray("data")
+                println(ja.toString())
+
+                var gson = Gson()
+
+                val sType = object : TypeToken<List<Card>>() { }.type
+
+                var cards = gson.fromJson<List<Card>>(ja.toString(), sType)
+                println(cards[1].id) */
             },
             Response.ErrorListener { error ->
-                println("CAzzo")
+                println("Non ha funzionato")
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -61,5 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         queue.add(jsonObjectRequest)
+
+
     }
 }
