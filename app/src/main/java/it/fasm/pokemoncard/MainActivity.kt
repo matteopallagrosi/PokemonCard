@@ -11,31 +11,32 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import it.fasm.pokemoncard.databinding.ActivityHomeBinding
 import it.fasm.pokemoncard.databinding.ActivityMainBinding
 import it.fasm.pokemoncard.model.Card
 import org.json.JSONObject
 import kotlin.jvm.Throws
 
 
-class HomeActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding:ActivityHomeBinding
+    private lateinit var binding:ActivityMainBinding
 
     private var response = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHomeBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        prova()
+
+        binding.scrollCards.isHorizontalScrollBarEnabled = false
+        //prova()
     }
 
 
     fun prova() {
 
         //val url = "https://api.pokemontcg.io/v2/cards/xy7-54"
-        val url = "https://api.pokemontcg.io/v2/sets"
+        val url = "https://api.pokemontcg.io/v2/cards?q=rarity:\"Rare Holo\""
 
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(this)
@@ -45,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
             Response.Listener{ response ->
                 println(response.toString())
 
-                /*var jo = JSONObject(response)
+                var jo = JSONObject(response)
                 //var ja = jo.getJSONObject("data")
                 var ja = jo.getJSONArray("data")
                 println(ja.toString())
@@ -55,7 +56,7 @@ class HomeActivity : AppCompatActivity() {
                 val sType = object : TypeToken<List<Card>>() { }.type
 
                 var cards = gson.fromJson<List<Card>>(ja.toString(), sType)
-                println(cards[1].id) */
+                println(cards[0])
             },
             Response.ErrorListener { error ->
                 println("Non ha funzionato")
