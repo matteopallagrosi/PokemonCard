@@ -7,6 +7,7 @@ import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import it.fasm.pokemoncard.databinding.ActivityMainBinding
 import kotlin.jvm.Throws
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     fun prova() {
 
-        @Throws(AuthFailureError::class)
+        /*@Throws(AuthFailureError::class)
         fun getHeaders(): Map<String, String>? {
             //val params: MutableMap<String, String> =
             //    HashMap()
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             val headers: HashMap<String, String> = HashMap()
             headers.put("X-Api-Key", "99967d70-c1ae-4dcb-a297-6d613706472d")
             return headers
-        }
+        } */
 
         val url = "https://api.pokemontcg.io/v2/cards"
 
@@ -44,15 +45,20 @@ class MainActivity : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
 
 
-        val jsonObjectRequest = JsonArrayRequest(Request.Method.GET, url, null,
-            Response.Listener { response ->
-                val prova = "Response: %s".format(response.toString())
-                Log.w("prova", prova)
+        val jsonObjectRequest = object : StringRequest(Request.Method.GET, url,
+            Response.Listener{ response ->
+                println(response.toString())
             },
             Response.ErrorListener { error ->
-                // TODO: Handle error
+                println("CAzzo")
             }
-        )
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["X-Api-Key"] = "66e2513d-af69-45bc-9cd2-38f7a75a8326"
+                return headers
+            }
+        }
 
         queue.add(jsonObjectRequest)
     }
