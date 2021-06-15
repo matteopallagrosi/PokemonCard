@@ -1,6 +1,6 @@
 package it.fasm.pokemoncard.model
 
 data class SetImage (
-    val symbol: String,
-    val logo: String,
+    val symbol: String = "",
+    val logo: String = "",
         )

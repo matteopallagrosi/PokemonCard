@@ -31,9 +31,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.scrollCards.isHorizontalScrollBarEnabled = false
 
-        var adapter = SeriesAdapter()
+        var adapter = SeriesAdapter(this)
         binding.rvSeries.layoutManager = LinearLayoutManager(this)
         binding.rvSeries.adapter = adapter
+
+
 
 
 
@@ -44,7 +46,8 @@ class MainActivity : AppCompatActivity() {
     fun prova() {
 
         //val url = "https://api.pokemontcg.io/v2/cards/xy7-54"
-        val url = "https://api.pokemontcg.io/v2/cards?q=rarity:\"Rare Holo\""
+        //val url = "https://api.pokemontcg.io/v2/cards?q=rarity:\"Rare Holo\""
+        var url = "https://api.pokemontcg.io/v2/sets?q=series:XY"
 
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(this)
@@ -54,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             Response.Listener{ response ->
                 println(response.toString())
 
-                var jo = JSONObject(response)
+                /*var jo = JSONObject(response)
                 //var ja = jo.getJSONObject("data")
                 var ja = jo.getJSONArray("data")
                 println(ja.toString())
@@ -64,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 val sType = object : TypeToken<List<Card>>() { }.type
 
                 var cards = gson.fromJson<List<Card>>(ja.toString(), sType)
-                println(cards[0])
+                println(cards[0])*/
             },
             Response.ErrorListener { error ->
                 println("Non ha funzionato")
