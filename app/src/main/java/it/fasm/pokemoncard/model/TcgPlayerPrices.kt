@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 
 data class TcgPlayerPrices (
-        val normal: TcgPlayerValues,
-        val holofoil: TcgPlayerValues,
-        val reverseHolofoil: TcgPlayerValues,
+        val normal: TcgPlayerValues = TcgPlayerValues(),
+        val holofoil: TcgPlayerValues = TcgPlayerValues(),
+        val reverseHolofoil: TcgPlayerValues = TcgPlayerValues(),
 
         @SerializedName("1stEditionHolofoil")
-        val firstEditionHolofoil: TcgPlayerValues,
+        val firstEditionHolofoil: TcgPlayerValues = TcgPlayerValues(),
 
         @SerializedName("1stEditionNormal")
-        val firstEditionNormal: TcgPlayerValues,
+        val firstEditionNormal: TcgPlayerValues = TcgPlayerValues(),
         )

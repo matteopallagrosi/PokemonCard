@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.SetsActivity
 import it.fasm.pokemoncard.databinding.ActivityMainBinding
-import it.fasm.pokemoncard.databinding.CardLayoutBinding
+import it.fasm.pokemoncard.databinding.SeriesLayoutBinding
 
 class SeriesAdapter(val context: Context): RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
 
     private val series = intArrayOf(R.drawable.sun_moon, R.drawable.black_white,
             R.drawable.hearthgold, R.drawable.sword_shield, R.drawable.xy)
 
-    inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(binding: SeriesLayoutBinding): RecyclerView.ViewHolder(binding.root) {
 
         var card = binding.root
         var ivSerie = binding.ivSerie
@@ -27,7 +27,7 @@ class SeriesAdapter(val context: Context): RecyclerView.Adapter<SeriesAdapter.Vi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = CardLayoutBinding.inflate(layoutInflater, parent, false)
+        val binding = SeriesLayoutBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 

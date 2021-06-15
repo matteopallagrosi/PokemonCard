@@ -7,41 +7,40 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import it.fasm.pokemoncard.CardActivity
-import it.fasm.pokemoncard.databinding.SeriesLayoutBinding
+import it.fasm.pokemoncard.databinding.CardLayoutBinding
+import it.fasm.pokemoncard.model.Card
 import it.fasm.pokemoncard.model.CardSet
 
-class SetsAdapter(val sets: List<CardSet>, val logos: ArrayList<Bitmap>, val context: Context): RecyclerView.Adapter<SetsAdapter.ViewHolder>() {
+class CardsAdapter(val cards: List<Card>, val images: ArrayList<Bitmap>, val context: Context): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
+    inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
+        var card: Card = Card()
+            set(value) {
+                field = value
+            }
+        var cardLayout = binding.root
 
-    inner class ViewHolder(binding:SeriesLayoutBinding): RecyclerView.ViewHolder(binding.root) {
-        var set: CardSet = CardSet()
-        set(value) {
-            field = value
-        }
-        var card = binding.root
-
-        var logoSet = binding.ivSerie
+        var cardImage = binding.ivCard
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = SeriesLayoutBinding.inflate(layoutInflater, parent, false)
+        val binding = CardLayoutBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.set = sets[position]
-        holder.logoSet.setImageBitmap(logos[position])
-        holder.card.setOnClickListener {
+        holder.card = cards[position]
+        holder.cardImage.setImageBitmap(images[position])
+        /* holder.cardLayout.setOnClickListener {
             val i = Intent(context, CardActivity::class.java)
             i.putExtra("set", holder.set.id)
             context.startActivity(i)
-        }
+        } */
 
     }
 
     override fun getItemCount(): Int {
-        return sets.size
+        return cards.size
     }
-
 }

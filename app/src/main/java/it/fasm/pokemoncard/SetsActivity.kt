@@ -27,7 +27,6 @@ class SetsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val serie = intent.extras?.getString("serie")
-        println(serie)
 
         setUI(serie)
 
@@ -62,7 +61,7 @@ class SetsActivity : AppCompatActivity() {
                             println("OK")
                             if (logos.size == sets.size) {
                                 binding.rvSets.layoutManager = GridLayoutManager(this, 2)
-                                binding.rvSets.adapter = SetsAdapter(sets,logos)
+                                binding.rvSets.adapter = SetsAdapter(sets,logos, this)
                             }
 
                         }, 0, 0,
