@@ -25,7 +25,7 @@ class SetsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySetsBinding
     private lateinit var adapter: SetsAdapter
     private var sets = ArrayList<CardSet>()
-    private var logos = ArrayList<Bitmap>()
+    private var logos = HashMap<String, Bitmap>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +65,7 @@ class SetsActivity : AppCompatActivity() {
                     val requestQueue = Volley.newRequestQueue(this)
                     for(set in sets) {
                         val imageRequest = ImageRequest(set.images.logo, {
-                            logos.add(it)
+                            logos[set.id] = it
                             println("OK")
                             adapter.notifyDataSetChanged()
                         }, 0, 0,
@@ -73,6 +73,7 @@ class SetsActivity : AppCompatActivity() {
                                 { error ->
                                     Log.e("Volley", error.toString())
                                 })
+
                         requestQueue.add(imageRequest)
                     }
                 },

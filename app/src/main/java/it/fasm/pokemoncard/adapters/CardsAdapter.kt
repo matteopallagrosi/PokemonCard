@@ -11,7 +11,7 @@ import it.fasm.pokemoncard.databinding.CardLayoutBinding
 import it.fasm.pokemoncard.model.Card
 import it.fasm.pokemoncard.model.CardSet
 
-class CardsAdapter(val cards: ArrayList<Card>, val images: ArrayList<Bitmap>, val context: Context): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
+class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
     inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         var card: Card = Card()
@@ -31,12 +31,16 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: ArrayList<Bitmap>, va
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.card = cards[position]
-        holder.cardImage.setImageBitmap(images[position])
+        holder.cardImage.setImageBitmap(images[holder.card.id])
         /* holder.cardLayout.setOnClickListener {
             val i = Intent(context, CardActivity::class.java)
             i.putExtra("set", holder.set.id)
             context.startActivity(i)
         } */
+        holder.cardLayout.setOnClickListener {
+            println(holder.card.name)
+        }
+
 
     }
 

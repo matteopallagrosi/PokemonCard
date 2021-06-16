@@ -28,7 +28,7 @@ class CardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCardBinding
     private lateinit var adapter: CardsAdapter
     private var cards = ArrayList<Card>()
-    private var cardImages = ArrayList<Bitmap>()
+    private var cardImages = HashMap<String ,Bitmap>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,15 +66,13 @@ class CardActivity : AppCompatActivity() {
                     cards.addAll(gson.fromJson<ArrayList<Card>>(ja.toString(), sType))
                     val cardBack = BitmapFactory.decodeResource(this.resources, R.drawable.pokemon_card_back)
                     for (card in cards) {
-                        cardImages.add(cardBack)
+                        cardImages[card.id] = cardBack
                     }
                     adapter.notifyDataSetChanged()
                     val requestQueue = Volley.newRequestQueue(this)
-                    var position: Int = 0
                     for (card in cards) {
                         val imageRequest = ImageRequest(card.images.small, {
-                            cardImages[position] = it
-                            position++
+                            cardImages[card.id] = it
                             println("OK")
                             adapter.notifyDataSetChanged()
 
