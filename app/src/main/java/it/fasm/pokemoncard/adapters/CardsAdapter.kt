@@ -11,7 +11,7 @@ import it.fasm.pokemoncard.databinding.CardLayoutBinding
 import it.fasm.pokemoncard.model.Card
 import it.fasm.pokemoncard.model.CardSet
 
-class CardsAdapter(val cards: List<Card>, val images: ArrayList<Bitmap>, val context: Context): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
+class CardsAdapter(val cards: ArrayList<Card>, val images: ArrayList<Bitmap>, val context: Context): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
     inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         var card: Card = Card()
@@ -41,6 +41,6 @@ class CardsAdapter(val cards: List<Card>, val images: ArrayList<Bitmap>, val con
     }
 
     override fun getItemCount(): Int {
-        return cards.size
+        return images.size
     }
 }

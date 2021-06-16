@@ -1,5 +1,6 @@
 package it.fasm.pokemoncard
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -34,10 +35,6 @@ class MainActivity : AppCompatActivity() {
         var adapter = SeriesAdapter(this)
         binding.rvSeries.layoutManager = LinearLayoutManager(this)
         binding.rvSeries.adapter = adapter
-
-
-
-
 
         //prova()
     }

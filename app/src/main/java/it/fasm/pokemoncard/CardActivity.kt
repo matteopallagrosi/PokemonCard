@@ -1,27 +1,34 @@
 package it.fasm.pokemoncard
 
+
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.RetryPolicy
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import it.fasm.pokemoncard.adapters.CardsAdapter
-import it.fasm.pokemoncard.adapters.SetsAdapter
 import it.fasm.pokemoncard.databinding.ActivityCardBinding
 import it.fasm.pokemoncard.model.Card
-import it.fasm.pokemoncard.model.CardSet
 import org.json.JSONObject
+
 
 class CardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCardBinding
+    private lateinit var adapter: CardsAdapter
+    private var cards = ArrayList<Card>()
+    private var cardImages = ArrayList<Bitmap>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +37,10 @@ class CardActivity : AppCompatActivity() {
 
         val set = intent.extras?.getString("set")
         println(set)
+
+        binding.rvCards.layoutManager = GridLayoutManager(this, 3)
+        adapter = CardsAdapter(cards, cardImages, this)
+        binding.rvCards.adapter = adapter
 
         setUICard(set)
     }
@@ -41,40 +52,43 @@ class CardActivity : AppCompatActivity() {
 
 
         val jsonObjectRequest = object : StringRequest(
-            Request.Method.GET, url,
-            Response.Listener{ response ->
+                Request.Method.GET, url,
+                Response.Listener { response ->
 
-                var jo = JSONObject(response)
-                var ja = jo.getJSONArray("data")
-                println(ja.toString())
+                    var jo = JSONObject(response)
+                    var ja = jo.getJSONArray("data")
+                    println(ja.toString())
 
-                var gson = Gson()
+                    var gson = Gson()
 
-                val sType = object : TypeToken<List<Card>>() { }.type
+                    val sType = object : TypeToken<ArrayList<Card>>() {}.type
 
-                var cards = gson.fromJson<List<Card>>(ja.toString(), sType)
-                var cardImages = ArrayList<Bitmap>()
-                val requestQueue = Volley.newRequestQueue(this)
-                for(card in cards) {
-                    val imageRequest = ImageRequest(card.images.small, {
-                        cardImages.add(it)
-                        println("OK")
-                        if (cardImages.size == cards.size) {
-                            binding.rvCards.layoutManager = GridLayoutManager(this, 3)
-                            binding.rvCards.adapter = CardsAdapter(cards, cardImages, this)
-                        }
+                    cards.addAll(gson.fromJson<ArrayList<Card>>(ja.toString(), sType))
+                    val cardBack = BitmapFactory.decodeResource(this.resources, R.drawable.pokemon_card_back)
+                    for (card in cards) {
+                        cardImages.add(cardBack)
+                    }
+                    adapter.notifyDataSetChanged()
+                    val requestQueue = Volley.newRequestQueue(this)
+                    var position: Int = 0
+                    for (card in cards) {
+                        val imageRequest = ImageRequest(card.images.small, {
+                            cardImages[position] = it
+                            position++
+                            println("OK")
+                            adapter.notifyDataSetChanged()
 
-                    }, 0, 0,
-                        ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
-                        {
-                            println("Non ha funzionato")
-                        })
-                    requestQueue.add(imageRequest)
+                        }, 0, 0,
+                                ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
+                                { error ->
+                                    Log.e("Volley", error.toString())
+                                })
+                        requestQueue.add(imageRequest)
+                    }
+                },
+                Response.ErrorListener { error ->
+                    Log.e("Volley", error.toString())
                 }
-            },
-            Response.ErrorListener { error ->
-                println("Non ha funzionato")
-            }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
@@ -82,6 +96,21 @@ class CardActivity : AppCompatActivity() {
                 return headers
             }
         }
+
+        jsonObjectRequest.setRetryPolicy( object : RetryPolicy {
+            override fun getCurrentTimeout(): Int {
+                return 50000
+            }
+
+            override fun getCurrentRetryCount(): Int {
+                return 50000
+            }
+
+            override fun retry(error: VolleyError?) {
+            }
+
+
+        })
 
         queue.add(jsonObjectRequest)
 

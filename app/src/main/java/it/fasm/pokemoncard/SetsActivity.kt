@@ -3,6 +3,7 @@ package it.fasm.pokemoncard
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.volley.Request
@@ -12,14 +13,19 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import it.fasm.pokemoncard.adapters.CardsAdapter
 import it.fasm.pokemoncard.adapters.SetsAdapter
 import it.fasm.pokemoncard.databinding.ActivitySetsBinding
+import it.fasm.pokemoncard.model.Card
 import it.fasm.pokemoncard.model.CardSet
 import org.json.JSONObject
 
 class SetsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySetsBinding
+    private lateinit var adapter: SetsAdapter
+    private var sets = ArrayList<CardSet>()
+    private var logos = ArrayList<Bitmap>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +33,9 @@ class SetsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val serie = intent.extras?.getString("serie")
+        binding.rvSets.layoutManager = GridLayoutManager(this, 2)
+        adapter = SetsAdapter(sets, logos, this)
+        binding.rvSets.adapter = adapter
 
         setUI(serie)
 
@@ -50,30 +59,25 @@ class SetsActivity : AppCompatActivity() {
 
                     var gson = Gson()
 
-                    val sType = object : TypeToken<List<CardSet>>() { }.type
+                    val sType = object : TypeToken<ArrayList<CardSet>>() { }.type
 
-                    var sets = gson.fromJson<List<CardSet>>(ja.toString(), sType)
-                    var logos = ArrayList<Bitmap>()
+                    sets.addAll(gson.fromJson<ArrayList<CardSet>>(ja.toString(), sType))
                     val requestQueue = Volley.newRequestQueue(this)
                     for(set in sets) {
                         val imageRequest = ImageRequest(set.images.logo, {
                             logos.add(it)
                             println("OK")
-                            if (logos.size == sets.size) {
-                                binding.rvSets.layoutManager = GridLayoutManager(this, 2)
-                                binding.rvSets.adapter = SetsAdapter(sets,logos, this)
-                            }
-
+                            adapter.notifyDataSetChanged()
                         }, 0, 0,
                                 ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
-                                {
-                                    println("Non ha funzionato")
+                                { error ->
+                                    Log.e("Volley", error.toString())
                                 })
                         requestQueue.add(imageRequest)
                     }
                 },
                 Response.ErrorListener { error ->
-                    println("Non ha funzionato")
+                    Log.e("Volley", error.toString())
                 }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
