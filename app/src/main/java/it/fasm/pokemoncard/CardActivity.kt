@@ -120,7 +120,7 @@ class CardActivity : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                     val requestQueue = Volley.newRequestQueue(this)
                     for (card in cards) {
-                        val imageRequest = ImageRequest(card.images.small, {
+                        val imageRequest = ImageRequest(card.images.large, {
                             cardImages[card.id] = it
                             println("OK")
                             adapter.notifyDataSetChanged()
