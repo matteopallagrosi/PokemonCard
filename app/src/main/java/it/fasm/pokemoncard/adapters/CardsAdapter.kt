@@ -6,10 +6,9 @@ import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import it.fasm.pokemoncard.CardActivity
+import it.fasm.pokemoncard.CardLargeActivity
 import it.fasm.pokemoncard.databinding.CardLayoutBinding
 import it.fasm.pokemoncard.model.Card
-import it.fasm.pokemoncard.model.CardSet
 
 class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
@@ -32,15 +31,16 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.card = cards[position]
         holder.cardImage.setImageBitmap(images[holder.card.id])
-        /* holder.cardLayout.setOnClickListener {
-            val i = Intent(context, CardActivity::class.java)
-            i.putExtra("set", holder.set.id)
+            holder.cardLayout.setOnClickListener {
+            val i = Intent(context, CardLargeActivity::class.java)
+            i.putExtra("card", holder.card.id)
             context.startActivity(i)
-        } */
+        }
+        /*
         holder.cardLayout.setOnClickListener {
             println(holder.card.name)
         }
-
+        */
 
     }
 
