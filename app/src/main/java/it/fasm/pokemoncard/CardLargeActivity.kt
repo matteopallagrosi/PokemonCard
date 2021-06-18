@@ -1,24 +1,24 @@
 package it.fasm.pokemoncard
 
+import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.RetryPolicy
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import it.fasm.pokemoncard.databinding.ActivityCardBinding
 import it.fasm.pokemoncard.databinding.ActivityCardLargeBinding
 import it.fasm.pokemoncard.model.Card
 import org.json.JSONObject
+
 
 class CardLargeActivity : AppCompatActivity() {
 
@@ -58,6 +58,8 @@ class CardLargeActivity : AppCompatActivity() {
                     var card = gson.fromJson<Card>(ja.toString(), sType)
                     println(card)
 
+                    setDescription(card)
+
                     val requestQueue = Volley.newRequestQueue(this)
                     val imageRequest = ImageRequest(card.images.large, {
                         binding.ivcardlarge.setImageBitmap(it)
@@ -76,12 +78,27 @@ class CardLargeActivity : AppCompatActivity() {
         ) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-                headers["X-Api-Key"] = "66e2513d-af69-45bc-9cd2-38f7a75a8326"
+                headers["X-Api-Key"] = "99967d70-c1ae-4dcb-a297-6d613706472d\n"
                 return headers
             }
         }
 
         queue.add(jsonObjectRequest)
+    }
+
+    private fun setDescription(card: Card) {
+
+        binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
+
+        binding.cvcardlarge.setOnClickListener(){
+            val url_tcg = card.tcgplayer.url
+            val uri: Uri = Uri.parse(url_tcg) // missing 'http://' will cause crashed
+
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
+
+
     }
 
 

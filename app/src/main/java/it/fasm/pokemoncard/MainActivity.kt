@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         ) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-                headers["X-Api-Key"] = "66e2513d-af69-45bc-9cd2-38f7a75a8326"
+                headers["X-Api-Key"] = "99967d70-c1ae-4dcb-a297-6d613706472d\n"
                 return headers
             }
         }

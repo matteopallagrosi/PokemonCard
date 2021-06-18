@@ -124,6 +124,8 @@ class CardActivity : AppCompatActivity() {
                             cardImages[card.id] = it
                             println("OK")
                             adapter.notifyDataSetChanged()
+                            binding.tvnumbercards.text = cards.size.toString()
+                            binding.tvdate.text = cards[0].set.releaseDate.toString()
 
                         }, 0, 0,
                                 ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
@@ -139,7 +141,7 @@ class CardActivity : AppCompatActivity() {
         ) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-                headers["X-Api-Key"] = "66e2513d-af69-45bc-9cd2-38f7a75a8326"
+                headers["X-Api-Key"] = "99967d70-c1ae-4dcb-a297-6d613706472d\n"
                 return headers
             }
         }
