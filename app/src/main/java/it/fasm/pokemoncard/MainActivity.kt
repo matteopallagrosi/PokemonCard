@@ -1,23 +1,18 @@
 package it.fasm.pokemoncard
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import it.fasm.pokemoncard.adapters.SeriesAdapter
 import it.fasm.pokemoncard.databinding.ActivityMainBinding
-import it.fasm.pokemoncard.model.Card
-import org.json.JSONObject
-import kotlin.jvm.Throws
+import it.fasm.pokemoncard.fragments.FavoritesFragment
+import it.fasm.pokemoncard.fragments.HomeFragment
+import it.fasm.pokemoncard.fragments.SearchFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +25,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val cardFragment = HomeFragment()
+        val favoritesFragment = FavoritesFragment()
+        val searchFragment = SearchFragment()
+
+        makeCurrentFragment(cardFragment)
+
+        binding.bottomNavigation.setOnNavigationItemReselectedListener {
+            when (it){
+                binding.ic_cards -> makeCurrentFragment()
+                binding.ic_search -> makeCurrentFragment()
+                binding.ic_favorites -> makeCurrentFragment()
+            }
+        }
+
         binding.scrollCards.isHorizontalScrollBarEnabled = false
 
         var adapter = SeriesAdapter(this)
@@ -37,6 +46,13 @@ class MainActivity : AppCompatActivity() {
         binding.rvSeries.adapter = adapter
 
         //prova()
+    }
+
+    private fun makeCurrentFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fl_wrapper,fragment)
+            commit()
+
     }
 
 

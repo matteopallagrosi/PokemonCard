@@ -88,7 +88,16 @@ class CardLargeActivity : AppCompatActivity() {
 
     private fun setDescription(card: Card) {
 
-        binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
+        if (card.tcgplayer.prices.holofoil.mid != null) {
+            binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
+        } else {
+            binding.tvcardprice.text = "-"
+        }
+
+
+        if (card.nationalPokedexNumber != null){
+            binding.tvpokedexnumber.text = card.nationalPokedexNumber[0].toString()
+        }
 
         binding.cvcardlarge.setOnClickListener(){
             val url_tcg = card.tcgplayer.url

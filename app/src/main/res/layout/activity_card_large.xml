@@ -33,8 +33,9 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvcardlarge"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="30dp">
+                android:layout_height="83dp"
+                android:layout_marginTop="30dp"
+                app:cardCornerRadius="6dp">
 
                 <ImageView
                     android:id="@+id/imageView12"
@@ -46,8 +47,8 @@
 
                 <ImageView
                     android:id="@+id/ivtcg"
-                    android:layout_width="93dp"
-                    android:layout_height="78dp"
+                    android:layout_width="90dp"
+                    android:layout_height="80dp"
                     android:layout_gravity="start"
                     android:layout_marginLeft="10dp"
                     app:srcCompat="@drawable/tcg" />
@@ -60,6 +61,28 @@
                     android:layout_marginLeft="120dp"
                     android:textColor="#4CAF50"
                     android:textSize="24sp" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="6dp">
+
+                <TextView
+                    android:id="@+id/tvpokedexnumber"
+                    android:layout_width="201dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="120dp"
+                    android:textColor="#4CAF50"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/imageView13"
+                    android:layout_width="90dp"
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="10dp"
+                    app:srcCompat="@drawable/pokedex" />
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
