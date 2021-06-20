@@ -18,7 +18,7 @@ data class Card(
     val number: String = "",
     val artist: String? = "",
     val rarity: String? = "",
-    val nationalPokedexNumber: List<Int>? = null,
+    val nationalPokedexNumbers: List<Int>? = null,
     val legalities: Legalities = Legalities(),
     val images: CardImage = CardImage(),
     val tcgplayer: Tcgplayer = Tcgplayer(),

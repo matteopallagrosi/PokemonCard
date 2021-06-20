@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
@@ -63,6 +64,7 @@ class CardLargeActivity : AppCompatActivity() {
                     val requestQueue = Volley.newRequestQueue(this)
                     val imageRequest = ImageRequest(card.images.large, {
                         binding.ivcardlarge.setImageBitmap(it)
+                        binding.ivcardlarge.visibility = View.VISIBLE
                         println("OK")
 
                     }, 0, 0,
@@ -88,16 +90,25 @@ class CardLargeActivity : AppCompatActivity() {
 
     private fun setDescription(card: Card) {
 
-        if (card.tcgplayer.prices.holofoil.mid != null) {
+        if (card.tcgplayer.prices.normal.mid != null) {
             binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
-        } else {
+        }
+        else if (card.tcgplayer.prices.holofoil.mid != null){
+            binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
+        }
+        else if (card.tcgplayer.prices.reverseHolofoil.mid != null){
+            binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
+        }
+        else {
             binding.tvcardprice.text = "-"
         }
 
 
-        if (card.nationalPokedexNumber != null){
-            binding.tvpokedexnumber.text = card.nationalPokedexNumber[0].toString()
-        }
+        binding.tvpokedexnumber.text = card.nationalPokedexNumbers?.get(0).toString()
+        println(card.nationalPokedexNumbers?.get(0).toString())
+
+        binding.tvrarity.text = card.rarity
+
 
         binding.cvcardlarge.setOnClickListener(){
             val url_tcg = card.tcgplayer.url

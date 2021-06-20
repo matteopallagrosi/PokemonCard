@@ -1,17 +1,17 @@
 package it.fasm.pokemoncard.model
 
 enum class Type(internal var text: String? = null) {
-    COLORLESS,
-    DARKNESS,
-    DRAGON,
-    FAIRY,
-    FIGHTING,
-    FIRE,
-    GRASS,
-    LIGHTNING,
-    METAL,
-    PSYCHIC,
-    WATER,
+    Colorless,
+    Darkness,
+    Dragon,
+    Fairy,
+    Fighting,
+    Fire,
+    Grass,
+    Lightning,
+    Metal,
+    Psychic,
+    Water,
     UNKNOWN;
 
     val displayName: String
