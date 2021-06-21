@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rarity_string">
+        <item>Common</item>
+        <item>Uncommon</item>
+        <item>Rare</item>
+        <item>Rare Secret</item>
+        <item>Rare Rainbow</item>
+        <item>Rare Ultra</item>
+        <item>Rare ACE</item>
+        <item>Rare BREAK</item>
+        <item>Rare Holo</item>
+        <item>Rare Holo EX</item>
+        <item>Rare Holo GX</item>
+        <item>Rare Holo Star</item>
+        <item>Rare Holo V</item>
+        <item>Rare Holo VMAX</item>
+        <item>Rare Prime</item>
+        <item>Rare Prism Star</item>
+        <item>Rare Shining</item>
+        <item>Rare Shiny</item>
+        <item>Rare Shiny GX</item>
+        <item>Promo</item>
+        <item>LEGEND</item>
+        <item>Amazing Rare</item>
+    </string-array>
+
+</resources>
