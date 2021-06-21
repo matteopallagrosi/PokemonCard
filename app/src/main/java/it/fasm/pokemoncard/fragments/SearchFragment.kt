@@ -39,6 +39,11 @@ class SearchFragment : Fragment() {
     private var cards = ArrayList<Card>()
     private var cardImages = HashMap<String , Bitmap>()
 
+    private lateinit var queue : RequestQueue
+    private lateinit var requestQueue : RequestQueue
+
+    val TAG1 = "CARD"
+    val TAG2 = "IMAGE"
 
 
 
@@ -60,6 +65,8 @@ class SearchFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val view = binding.root
+        queue = Volley.newRequestQueue(requireContext())
+        requestQueue = Volley.newRequestQueue(requireContext())
 
         class GridSpacingItemDecoration(
                 private val spanCount: Int,
@@ -195,11 +202,8 @@ class SearchFragment : Fragment() {
     fun setUICard(url: String) {
         //var url = "https://api.pokemontcg.io/v2/cards?q=set.id:$set"
 
-        val queue = Volley.newRequestQueue(requireContext())
-        val requestQueue = Volley.newRequestQueue(requireContext())
-
-        queue.cancelAll(requireContext())
-        requestQueue.cancelAll(requireContext())
+        queue.cancelAll(TAG1)
+        requestQueue.cancelAll(TAG2)
 
         val jsonObjectRequest = object : StringRequest(
                 Request.Method.GET, url,
@@ -239,6 +243,7 @@ class SearchFragment : Fragment() {
                                 { error ->
                                     Log.e("Volley", error.toString())
                                 })
+                        imageRequest.tag = TAG2
                         requestQueue.add(imageRequest)
                     }
                 },
@@ -267,7 +272,7 @@ class SearchFragment : Fragment() {
 
 
         })
-
+        jsonObjectRequest.tag = TAG1
         queue.add(jsonObjectRequest)
 
     }
