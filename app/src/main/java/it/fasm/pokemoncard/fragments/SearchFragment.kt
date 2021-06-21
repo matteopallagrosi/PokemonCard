@@ -18,10 +18,7 @@ import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.RetryPolicy
-import com.android.volley.VolleyError
+import com.android.volley.*
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -41,6 +38,9 @@ class SearchFragment : Fragment() {
     private lateinit var adapter: CardsAdapter
     private var cards = ArrayList<Card>()
     private var cardImages = HashMap<String , Bitmap>()
+
+
+
 
 /*
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -180,7 +180,7 @@ class SearchFragment : Fragment() {
             if (text != ""){
                 url = url + "name:" + text + "*"
             }
-            else if (rarity != "all"){
+            if (rarity != "All"){
                 url = url + " !rarity:" + "\"" + rarity + "\""
             }
             url = url + " hp:" + "[" + minhp + " TO *]"
@@ -196,8 +196,10 @@ class SearchFragment : Fragment() {
         //var url = "https://api.pokemontcg.io/v2/cards?q=set.id:$set"
 
         val queue = Volley.newRequestQueue(requireContext())
-        adapter = CardsAdapter(cards, cardImages, requireContext())
-        binding.rvcardsearch.adapter = adapter
+        val requestQueue = Volley.newRequestQueue(requireContext())
+
+        queue.cancelAll(requireContext())
+        requestQueue.cancelAll(requireContext())
 
         val jsonObjectRequest = object : StringRequest(
                 Request.Method.GET, url,
@@ -211,13 +213,14 @@ class SearchFragment : Fragment() {
 
                     val sType = object : TypeToken<ArrayList<Card>>() {}.type
 
+                    cardImages.clear()
+                    cards.clear()
                     cards.addAll(gson.fromJson<ArrayList<Card>>(ja.toString(), sType))
                     val cardBack = BitmapFactory.decodeResource(requireContext().resources, R.drawable.card_back)
                     for (card in cards) {
                         cardImages[card.id] = cardBack
                     }
                     adapter.notifyDataSetChanged()
-                    val requestQueue = Volley.newRequestQueue(requireContext())
                     println("size"+cards.size)
                     if (cards.size == 0){
                         binding.tvNoresult.visibility = View.VISIBLE

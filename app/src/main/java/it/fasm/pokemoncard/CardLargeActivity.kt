@@ -103,9 +103,13 @@ class CardLargeActivity : AppCompatActivity() {
             binding.tvcardprice.text = "-"
         }
 
-
-        binding.tvpokedexnumber.text = "#" + card.nationalPokedexNumbers?.get(0).toString()
-        println(card.nationalPokedexNumbers?.get(0).toString())
+        if (card.nationalPokedexNumbers?.get(0) != null){
+            binding.tvpokedexnumber.text = "#" + card.nationalPokedexNumbers?.get(0).toString()
+            println(card.nationalPokedexNumbers?.get(0).toString())
+        }
+        else {
+            binding.tvpokedexnumber.text = "-"
+        }
 
         binding.tvrarity.text = card.rarity
 
