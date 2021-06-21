@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setContentView(R.layout.activity_main)
 
         /*
         val navHostFragment =
@@ -58,6 +57,18 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         bottomNavigationView.setupWithNavController(navController)
+
+
+        //cambia la barra superiore in base al fragment
+        val appBarConfig = AppBarConfiguration(
+            setOf(
+                R.id.cardsFragment,
+                R.id.searchFragment,
+                R.id.favoritesFragment
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfig)
+
 
         /*
         binding.scrollCards.isHorizontalScrollBarEnabled = false

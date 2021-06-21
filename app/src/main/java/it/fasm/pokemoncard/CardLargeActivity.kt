@@ -91,20 +91,20 @@ class CardLargeActivity : AppCompatActivity() {
     private fun setDescription(card: Card) {
 
         if (card.tcgplayer.prices.normal.mid != null) {
-            binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
+            binding.tvcardprice.text = card.tcgplayer.prices.normal.mid.toString() + "$"
         }
         else if (card.tcgplayer.prices.holofoil.mid != null){
             binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
         }
         else if (card.tcgplayer.prices.reverseHolofoil.mid != null){
-            binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
+            binding.tvcardprice.text = card.tcgplayer.prices.reverseHolofoil.mid.toString() + "$"
         }
         else {
             binding.tvcardprice.text = "-"
         }
 
 
-        binding.tvpokedexnumber.text = card.nationalPokedexNumbers?.get(0).toString()
+        binding.tvpokedexnumber.text = "#" + card.nationalPokedexNumbers?.get(0).toString()
         println(card.nationalPokedexNumbers?.get(0).toString())
 
         binding.tvrarity.text = card.rarity

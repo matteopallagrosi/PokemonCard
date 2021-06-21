@@ -113,7 +113,7 @@ class CardActivity : AppCompatActivity() {
                     val sType = object : TypeToken<ArrayList<Card>>() {}.type
 
                     cards.addAll(gson.fromJson<ArrayList<Card>>(ja.toString(), sType))
-                    val cardBack = BitmapFactory.decodeResource(this.resources, R.drawable.pokemon_card_back)
+                    val cardBack = BitmapFactory.decodeResource(this.resources, R.drawable.card_back)
                     for (card in cards) {
                         cardImages[card.id] = cardBack
                     }

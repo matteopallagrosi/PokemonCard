@@ -20,11 +20,11 @@
         tools:srcCompat="@drawable/pokemon1" />
 
     <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/ivstar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/star_big_off" />
+        app:srcCompat="@drawable/star_off" />
 </androidx.constraintlayout.widget.ConstraintLayout>
