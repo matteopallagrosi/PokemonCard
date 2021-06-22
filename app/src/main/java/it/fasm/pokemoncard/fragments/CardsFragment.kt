@@ -56,8 +56,6 @@ class CardsFragment : Fragment() {
             }
         })
 
-
-
         var i = 1
         binding.layout.forEach {
             val id = resources.getIdentifier("pokemon$i", "drawable", requireContext().packageName)
