@@ -16,5 +16,4 @@ data class CardDb (
     val rarity: String?,
     val image: Bitmap?,
     val deck: String = ""
-
 )
