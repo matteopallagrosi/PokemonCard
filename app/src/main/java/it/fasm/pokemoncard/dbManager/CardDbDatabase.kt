@@ -43,7 +43,7 @@ abstract class CardDbDatabase : RoomDatabase (){
                     CardDbDatabase::class.java,
                     "proverbi.db"
                 )
-                    .createFromAsset("databases/p2.db")
+
                     .build()
             return db as CardDbDatabase
         }
