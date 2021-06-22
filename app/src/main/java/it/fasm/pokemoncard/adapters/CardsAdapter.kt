@@ -35,6 +35,8 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.card = cards[position]
         holder.cardImage.setImageBitmap(images[holder.card.id])
+        if (holder.card.favorites) holder.star.setImageResource(R.drawable.star_on)
+        else holder.star.setImageResource(R.drawable.star_off)
         holder.cardLayout.setOnClickListener {
             val i = Intent(context, CardLargeActivity::class.java)
             i.putExtra("card", holder.card.id)
@@ -42,6 +44,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         }
         holder.star.setOnClickListener(){
             println(holder.card.name + "aggiunta ai preferiti")
+            holder.card.favorites = true
             holder.star.setImageResource(R.drawable.star_on)
         }
 

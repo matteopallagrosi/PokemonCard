@@ -24,6 +24,7 @@ data class Card(
     val tcgplayer: Tcgplayer = Tcgplayer(),
     val resistances: List<Effect>? = null,
     val ability: Ability? = null,
-    val ancientTrait: Ability? = null
+    val ancientTrait: Ability? = null,
+    var favorites: Boolean = false
 )
 
