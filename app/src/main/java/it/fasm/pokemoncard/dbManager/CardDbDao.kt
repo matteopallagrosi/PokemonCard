@@ -9,12 +9,8 @@ import androidx.room.Query
 @Dao
 interface CardDbDao {
 
-    @Insert (onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addCardDb(cardDb: CardDb)
     @Insert
-    fun insertAll(cardDb: CardDb)
+    fun addCard(card: CardDb)
 
-    @Query ("SELECT * FROM card_table")
-    fun readAllData(): LiveData<List<CardDb>>
 
 }
