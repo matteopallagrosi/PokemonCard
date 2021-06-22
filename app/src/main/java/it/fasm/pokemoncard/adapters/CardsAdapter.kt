@@ -13,6 +13,7 @@ import it.fasm.pokemoncard.model.Card
 
 class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
+
     inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         var card: Card = Card()
             set(value) {
@@ -22,6 +23,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
 
         var cardImage = binding.ivCard
         var star = binding.ivstar
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
