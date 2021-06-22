@@ -12,6 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.adapters.SeriesAdapter
 import it.fasm.pokemoncard.databinding.FragmentCardsBinding
+import it.fasm.pokemoncard.dbManager.CardDb
+import it.fasm.pokemoncard.dbManager.CardDbDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CardsFragment : Fragment() {
 
@@ -43,6 +48,11 @@ class CardsFragment : Fragment() {
             binding.ivcardforeground.setImageResource(R.drawable.pokemon1)
             binding.ivcardforeground.visibility = View.VISIBLE
             binding.floatingActionButton3.visibility = View.VISIBLE
+            var db = CardDbDatabase.getDatabase(requireContext())
+            var card1 = CardDb("1", 23)
+            CoroutineScope(Dispatchers.IO).launch {
+                db.cardDbDao().addCardDb(card1)
+            }
         }
 
 

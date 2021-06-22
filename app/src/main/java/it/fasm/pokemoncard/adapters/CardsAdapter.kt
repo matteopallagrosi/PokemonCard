@@ -5,14 +5,16 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import it.fasm.pokemoncard.CardLargeActivity
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.CardLayoutBinding
+import it.fasm.pokemoncard.dbManager.CardDbViewModel
 import it.fasm.pokemoncard.model.Card
 
 class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
-
 
     inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         var card: Card = Card()
@@ -42,6 +44,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         }
         holder.star.setOnClickListener(){
             println(holder.card.name + "aggiunta ai preferiti")
+            insertDataToDatabase()
             holder.star.setImageResource(R.drawable.star_on)
         }
 
@@ -55,5 +58,9 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
 
     override fun getItemCount(): Int {
         return images.size
+    }
+
+    private fun insertDataToDatabase(){
+
     }
 }

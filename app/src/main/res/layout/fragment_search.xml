@@ -58,6 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColorHint="#393535"
+        android:maxLines="1"
         app:endIconTint="#FFFFFF"
         app:hintAnimationEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
