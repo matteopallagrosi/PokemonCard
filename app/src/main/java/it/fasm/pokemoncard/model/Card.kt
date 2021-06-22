@@ -1,5 +1,9 @@
 package it.fasm.pokemoncard.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import org.jetbrains.annotations.NotNull
+
 data class Card(
     val id: String = "",
     val name: String = "",

@@ -1,12 +1,11 @@
 package it.fasm.pokemoncard.dbManager
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 
 
 @Database(entities = [CardDb::class], version = 1, exportSchema = true)
+@TypeConverters(Converters::class)
 abstract class CardDbDatabase : RoomDatabase (){
 /*
     abstract fun cardDbDao() :CardDbDao
@@ -36,6 +35,7 @@ abstract class CardDbDatabase : RoomDatabase (){
 
     companion object {
         private var db: CardDbDatabase? = null // Singleton
+
         fun getDatabase(context: Context): CardDbDatabase {
             if (db == null)
                 db = Room.databaseBuilder(
@@ -48,5 +48,5 @@ abstract class CardDbDatabase : RoomDatabase (){
         }
     }
 
-    abstract fun cardDbDao() :CardDbDao
+    abstract fun getCardDbDao() :CardDbDao
 }

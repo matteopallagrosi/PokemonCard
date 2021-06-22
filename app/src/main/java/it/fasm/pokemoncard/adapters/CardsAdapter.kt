@@ -5,14 +5,16 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import it.fasm.pokemoncard.CardLargeActivity
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.CardLayoutBinding
-import it.fasm.pokemoncard.dbManager.CardDbViewModel
+import it.fasm.pokemoncard.dbManager.CardDb
+import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.model.Card
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
@@ -48,6 +50,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
             println(holder.card.name + "aggiunta ai preferiti")
             holder.card.favorites = true
             holder.star.setImageResource(R.drawable.star_on)
+            insertDataToDatabase(holder.card, images[holder.card.id])
         }
 
         /*
@@ -62,7 +65,14 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         return images.size
     }
 
-    private fun insertDataToDatabase(){
+    private fun insertDataToDatabase(card: Card, image: Bitmap?){
+        var cardDb = CardDb(card.id, card.name, card.hp, card.tcgplayer.url, card.nationalPokedexNumbers!![0], card.rarity, image)
+        val cardDao = CardDbDatabase.getDatabase(this.context).getCardDbDao()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            cardDao.addCard(cardDb)
+            println("aggiunto!")
+        }
 
     }
 }
