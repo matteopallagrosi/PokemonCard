@@ -41,9 +41,8 @@ abstract class CardDbDatabase : RoomDatabase (){
                 db = Room.databaseBuilder(
                     context.applicationContext,
                     CardDbDatabase::class.java,
-                    "proverbi.db"
+                    "cards.db"
                 )
-                    .createFromAsset("databases/p2.db")
                     .build()
             return db as CardDbDatabase
         }

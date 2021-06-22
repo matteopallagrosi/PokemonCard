@@ -1,14 +1,17 @@
 package it.fasm.pokemoncard.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat.canScrollHorizontally
-import androidx.core.view.iterator
+import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
+import androidx.core.view.forEachIndexed
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SimpleOnItemTouchListener
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.adapters.SeriesAdapter
 import it.fasm.pokemoncard.databinding.FragmentCardsBinding
@@ -17,6 +20,8 @@ import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+
 
 class CardsFragment : Fragment() {
 
@@ -43,24 +48,35 @@ class CardsFragment : Fragment() {
         _binding = FragmentCardsBinding.inflate(inflater, container, false)
         val view = binding.root
         binding.scrollCards.isHorizontalScrollBarEnabled = false
+        var state = false
 
-        binding.imageView.setOnClickListener(){
-            binding.ivcardforeground.setImageResource(R.drawable.pokemon1)
-            binding.ivcardforeground.visibility = View.VISIBLE
-            binding.floatingActionButton3.visibility = View.VISIBLE
-            var db = CardDbDatabase.getDatabase(requireContext())
-            var card1 = CardDb("1", 23)
-            CoroutineScope(Dispatchers.IO).launch {
-                db.cardDbDao().addCardDb(card1)
+        binding.rvSeries.addOnItemTouchListener(object : SimpleOnItemTouchListener() {
+            override fun onInterceptTouchEvent(view: RecyclerView, e: MotionEvent): Boolean {
+                return state
             }
+        })
+
+
+
+        var i = 1
+        binding.layout.forEach {
+            val id = resources.getIdentifier("pokemon$i", "drawable", requireContext().packageName)
+
+            it.setOnClickListener(){
+                binding.ivcardforeground.setImageResource(id)
+                binding.ivcardforeground.visibility = View.VISIBLE
+                binding.floatingActionButton3.visibility = View.VISIBLE
+                state = true
+            }
+            i ++
         }
-
-
 
 
         binding.floatingActionButton3.setOnClickListener(){
             binding.floatingActionButton3.visibility  =View.INVISIBLE
             binding.ivcardforeground.visibility = View.INVISIBLE
+            binding.rvSeries.suppressLayout(false)
+            state = false
         }
 
         val adapter = SeriesAdapter(requireContext())
