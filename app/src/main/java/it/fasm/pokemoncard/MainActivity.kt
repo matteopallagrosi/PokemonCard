@@ -2,6 +2,7 @@ package it.fasm.pokemoncard
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -12,6 +13,9 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import it.fasm.pokemoncard.databinding.ActivityMainBinding
+import it.fasm.pokemoncard.fragments.CardsFragment
+import it.fasm.pokemoncard.fragments.FavoritesFragment
+import it.fasm.pokemoncard.fragments.SearchFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,57 +28,52 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragmentHost) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        binding.bottomNavigationView.setupWithNavController(
-            navController
-        )
-
-        val appBarConfig = AppBarConfiguration(
-            setOf(
-                R.id.cardsFragment,
-                R.id.searchFragment,
-                R.id.favoritesFragment
-            )
-        )
-
-        setupActionBarWithNavController(navController, appBarConfig)
-        */
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        val navHostFragment =
+        val searchFragment = SearchFragment()
+        val cardFragment = CardsFragment()
+        val favoritesFragment = FavoritesFragment()
+
+        bottomNavigationView.selectedItemId = R.id.cardsFragment
+
+
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.cardsFragment->setCurrentFragment(cardFragment)
+                R.id.searchFragment->setCurrentFragment(searchFragment)
+                R.id.favoritesFragment->setCurrentFragment(favoritesFragment)
+
+            }
+            true
+        }
+
+        /* val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentHost) as NavHostFragment
         val navController = navHostFragment.navController
 
-        bottomNavigationView.setupWithNavController(navController)
+        bottomNavigationView.setupWithNavController(navController) */
 
 
         //cambia la barra superiore in base al fragment
-        val appBarConfig = AppBarConfiguration(
+        /* val appBarConfig = AppBarConfiguration(
             setOf(
                 R.id.cardsFragment,
                 R.id.searchFragment,
                 R.id.favoritesFragment
             )
         )
-        setupActionBarWithNavController(navController, appBarConfig)
+        setupActionBarWithNavController(navController, appBarConfig) */
 
 
-        /*
-        binding.scrollCards.isHorizontalScrollBarEnabled = false
-
-        var adapter = SeriesAdapter(this)
-        binding.rvSeries.layoutManager = LinearLayoutManager(this)
-        binding.rvSeries.adapter = adapter
 
         //prova()
-        */
-
-
     }
+
+    private fun setCurrentFragment(fragment: Fragment) =
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.fragmentHost,fragment)
+                commit()
+            }
 
 
     fun prova() {

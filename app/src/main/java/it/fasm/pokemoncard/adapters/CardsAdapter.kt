@@ -5,8 +5,10 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
-import it.fasm.pokemoncard.CardLargeActivity
+import it.fasm.pokemoncard.CardLargeFragment
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.CardLayoutBinding
 import it.fasm.pokemoncard.dbManager.CardDb
@@ -51,9 +53,12 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         if (holder.card.favorites) holder.star.setImageResource(R.drawable.star_on)
         else holder.star.setImageResource(R.drawable.star_off)
         holder.cardLayout.setOnClickListener {
-            val i = Intent(context, CardLargeActivity::class.java)
-            i.putExtra("card", holder.card.id)
-            context.startActivity(i)
+            var activity = it.context as AppCompatActivity
+            var cardLargeFragment = CardLargeFragment()
+            val bundle = bundleOf("card" to holder.card.id)
+            cardLargeFragment.arguments = bundle
+            activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardLargeFragment)
+                .addToBackStack(null).commit();
         }
         holder.star.setOnClickListener(){
             if (holder.card.favorites == false){

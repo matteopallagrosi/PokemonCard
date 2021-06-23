@@ -5,8 +5,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
-import it.fasm.pokemoncard.CardActivity
+import it.fasm.pokemoncard.CardListFragment
+import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.SeriesLayoutBinding
 import it.fasm.pokemoncard.model.CardSet
 
@@ -33,9 +36,12 @@ class SetsAdapter(val sets: ArrayList<CardSet>, val logos: HashMap<String,Bitmap
         holder.set = sets[position]
         holder.logoSet.setImageBitmap(logos[holder.set.id])
         holder.card.setOnClickListener {
-            val i = Intent(context, CardActivity::class.java)
-            i.putExtra("set", holder.set.id)
-            context.startActivity(i)
+            var activity = it.context as AppCompatActivity
+            var cardListFragment = CardListFragment()
+            val bundle = bundleOf("set" to holder.set.id)
+            cardListFragment.arguments = bundle
+            activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardListFragment)
+                .addToBackStack(null).commit();
         }
 
     }
