@@ -1,8 +1,10 @@
 package it.fasm.pokemoncard.fragments
 
+import android.app.ProgressDialog.show
 import android.content.Context
 import android.os.Bundle
 import android.text.Html
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,8 +53,11 @@ class FavoritesFragment : Fragment() {
                     runBlocking {
                         job.join()
                     }
-                    if (result == -1L)
-                        Toast.makeText(requireContext(), "Name already exists", Toast.LENGTH_LONG).show()
+                    if (result == -1L) {
+                         var toast = Toast.makeText(requireContext(), "Name already exists", Toast.LENGTH_LONG)
+                         toast.setGravity(Gravity.BOTTOM, 0, 200)
+                         toast.show()
+                        }
                     else
                         addItem(deckName)
                 }
