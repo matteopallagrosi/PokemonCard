@@ -33,6 +33,7 @@ import it.fasm.pokemoncard.model.Card
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 
 
@@ -42,12 +43,15 @@ class CardListFragment : Fragment() {
     private lateinit var adapter: CardsAdapter
     private var cards = ArrayList<Card>()
     private var cardImages = HashMap<String ,Bitmap>()
-    private var numPref = 0
+    private var numPref = ""
+    private var numberCards = ""
+    private var releaseDate = ""
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCardListBinding.inflate(layoutInflater, container, false)
 
-        val set = arguments?.getString("set")
+        //val set = arguments?.getString("set")
 
         class GridSpacingItemDecoration(
                 private val spanCount: Int,
@@ -95,10 +99,18 @@ class CardListFragment : Fragment() {
 
         val includeEdge = true
         binding.rvCards.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
-
-        setUICard(set)
+        binding.tvnumbercards.text = numberCards
+        binding.tvdate.text = releaseDate
+        binding.tvpreferites.text = numPref
+        //setUICard(set)
 
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val set = arguments?.getString("set")
+        setUICard(set)
+        super.onCreate(savedInstanceState)
     }
 
 
@@ -167,13 +179,6 @@ class CardListFragment : Fragment() {
 
         val queue = Volley.newRequestQueue(this.context)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
-            if (set != null){
-                numPref = cardDao.numFavInSet(set)
-            }
-        }
-
 
         val jsonObjectRequest = object : StringRequest(
                 Request.Method.GET, url,
@@ -186,12 +191,25 @@ class CardListFragment : Fragment() {
                     var gson = Gson()
 
                     val sType = object : TypeToken<ArrayList<Card>>() {}.type
-
+                    var job = CoroutineScope(Dispatchers.IO).launch {
+                        val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
+                        if (set != null){
+                            numPref = cardDao.numFavInSet(set).toString()
+                        }
+                    }
+                    runBlocking {
+                        job.join()
+                    }
                     cards.addAll(gson.fromJson<ArrayList<Card>>(ja.toString(), sType))
                     val cardBack = BitmapFactory.decodeResource(this.resources, R.drawable.card_back)
                     for (card in cards) {
                         cardImages[card.id] = cardBack
                     }
+                    numberCards = cards.size.toString()
+                    releaseDate = cards[0].set.releaseDate
+                    binding.tvnumbercards.text = numberCards
+                    binding.tvdate.text = releaseDate
+                    binding.tvpreferites.text = numPref
                     adapter.notifyDataSetChanged()
                     val requestQueue = Volley.newRequestQueue(this.context)
                     for (card in cards) {
@@ -199,9 +217,6 @@ class CardListFragment : Fragment() {
                             cardImages[card.id] = it
                             println("OK")
                             adapter.notifyDataSetChanged()
-                            binding.tvnumbercards.text = cards.size.toString()
-                            binding.tvdate.text = cards[0].set.releaseDate.toString()
-                            binding.tvpreferites.text = numPref.toString()
 
                         }, 0, 0,
                                 ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,

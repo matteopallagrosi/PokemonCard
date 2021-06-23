@@ -53,6 +53,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         if (holder.card.favorites) holder.star.setImageResource(R.drawable.star_on)
         else holder.star.setImageResource(R.drawable.star_off)
         holder.cardLayout.setOnClickListener {
+            println("Hai cliccato!")
             var activity = it.context as AppCompatActivity
             var cardLargeFragment = CardLargeFragment()
             val bundle = bundleOf("card" to holder.card.id)

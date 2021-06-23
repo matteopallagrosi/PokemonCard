@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.*
 
 
-@Database(entities = [CardDb::class], version = 1, exportSchema = true)
+@Database(entities = [CardDb::class, DeckDb::class], version = 1, exportSchema = true)
 @TypeConverters(Converters::class)
 abstract class CardDbDatabase : RoomDatabase (){
 /*

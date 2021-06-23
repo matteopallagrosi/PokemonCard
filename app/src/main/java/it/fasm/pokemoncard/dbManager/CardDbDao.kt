@@ -18,5 +18,6 @@ interface CardDbDao {
     @Query ("SELECT COUNT(*) FROM card WHERE idSet = :idset")
     fun numFavInSet(idset: String): Int
 
-
+    @Insert (onConflict = OnConflictStrategy.IGNORE)
+    fun addDeck(deck: DeckDb): Long
 }
