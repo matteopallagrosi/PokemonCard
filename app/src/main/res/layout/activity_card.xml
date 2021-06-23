@@ -12,9 +12,9 @@
         android:layout_width="110dp"
         android:layout_height="80dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="50dp"
         app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -50,9 +50,9 @@
         android:id="@+id/cardView2"
         android:layout_width="110dp"
         android:layout_height="80dp"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="16dp"
         app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/cardView3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -73,6 +73,31 @@
             android:layout_marginTop="5dp"
             android:foregroundGravity="center"
             app:srcCompat="@drawable/calendar" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="110dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cardView3"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageView
+            android:id="@+id/imageView10"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_marginTop="5dp"
+            app:srcCompat="@drawable/star_on" />
+
+        <TextView
+            android:id="@+id/tvpreferites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="5dp"
+            android:textSize="16dp" />
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

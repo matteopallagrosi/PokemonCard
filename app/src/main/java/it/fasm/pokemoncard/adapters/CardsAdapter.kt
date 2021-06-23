@@ -39,6 +39,15 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.card = cards[position]
         holder.cardImage.setImageBitmap(images[holder.card.id])
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val cardDao = CardDbDatabase.getDatabase(context).getCardDbDao()
+            if (cardDao.checkCard(holder.card.id) == 1){
+                holder.card.favorites = true
+            }
+        }
+
+
         if (holder.card.favorites) holder.star.setImageResource(R.drawable.star_on)
         else holder.star.setImageResource(R.drawable.star_off)
         holder.cardLayout.setOnClickListener {
@@ -47,10 +56,17 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
             context.startActivity(i)
         }
         holder.star.setOnClickListener(){
-            println(holder.card.name + "aggiunta ai preferiti")
-            holder.card.favorites = true
-            holder.star.setImageResource(R.drawable.star_on)
-            insertDataToDatabase(holder.card, images[holder.card.id])
+            if (holder.card.favorites == false){
+                holder.card.favorites = true
+                holder.star.setImageResource(R.drawable.star_on)
+                insertDataToDatabase(holder.card, images[holder.card.id])
+                println(holder.card.name + "aggiunta ai preferiti")
+            } else {
+                holder.card.favorites = false
+                holder.star.setImageResource(R.drawable.star_off)
+                deleteDataFromDatabase(holder.card.id)
+                println(holder.card.name + "rimossa dai preferiti")
+            }
         }
 
         /*
@@ -66,7 +82,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
     }
 
     private fun insertDataToDatabase(card: Card, image: Bitmap?){
-        var cardDb = CardDb(card.id, card.name, card.hp, card.tcgplayer.url, card.nationalPokedexNumbers!![0], card.rarity, image)
+        var cardDb = CardDb(card.id, card.name, card.hp, card.tcgplayer.url, card.nationalPokedexNumbers!![0], card.rarity, card.set.id, image)
         val cardDao = CardDbDatabase.getDatabase(this.context).getCardDbDao()
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -74,5 +90,14 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
             println("aggiunto!")
         }
 
+    }
+
+    private fun deleteDataFromDatabase(id: String){
+        val cardDao = CardDbDatabase.getDatabase(this.context).getCardDbDao()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            cardDao.deleteCard(id)
+            println("rimosso!")
+        }
     }
 }

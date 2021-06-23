@@ -1,16 +1,22 @@
 package it.fasm.pokemoncard.dbManager
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface CardDbDao {
 
-    @Insert
+    @Insert (onConflict = OnConflictStrategy.IGNORE)
     fun addCard(card: CardDb)
+
+    @Query ("DELETE FROM card WHERE id = :id")
+    fun deleteCard(id: String)
+
+    @Query ("SELECT COUNT(*) FROM card WHERE id = :id")
+    fun checkCard(id: String): Int
+
+    @Query ("SELECT COUNT(*) FROM card WHERE idSet = :idset")
+    fun numFavInSet(idset: String): Int
 
 
 }

@@ -14,6 +14,7 @@ data class CardDb (
     val shop: String?,
     val pokedexNumber: Int?,
     val rarity: String?,
+    val idSet: String?,
     val image: Bitmap?,
     val deck: String = ""
 )

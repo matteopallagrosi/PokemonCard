@@ -23,7 +23,11 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import it.fasm.pokemoncard.adapters.CardsAdapter
 import it.fasm.pokemoncard.databinding.ActivityCardBinding
+import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.model.Card
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 
@@ -33,6 +37,7 @@ class CardActivity : AppCompatActivity() {
     private lateinit var adapter: CardsAdapter
     private var cards = ArrayList<Card>()
     private var cardImages = HashMap<String ,Bitmap>()
+    private var numPref = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +104,12 @@ class CardActivity : AppCompatActivity() {
 
         val queue = Volley.newRequestQueue(this)
 
+        CoroutineScope(Dispatchers.IO).launch {
+            val cardDao = CardDbDatabase.getDatabase(this@CardActivity).getCardDbDao()
+            if (set != null){
+                numPref = cardDao.numFavInSet(set)
+            }
+        }
 
         val jsonObjectRequest = object : StringRequest(
                 Request.Method.GET, url,
@@ -107,6 +118,7 @@ class CardActivity : AppCompatActivity() {
                     var jo = JSONObject(response)
                     var ja = jo.getJSONArray("data")
                     println(ja.toString())
+
 
                     var gson = Gson()
 
@@ -126,6 +138,7 @@ class CardActivity : AppCompatActivity() {
                             adapter.notifyDataSetChanged()
                             binding.tvnumbercards.text = cards.size.toString()
                             binding.tvdate.text = cards[0].set.releaseDate.toString()
+                            binding.tvpreferites.text = numPref.toString()
 
                         }, 0, 0,
                                 ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
