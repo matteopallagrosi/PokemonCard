@@ -29,6 +29,7 @@ import it.fasm.pokemoncard.adapters.SetsAdapter
 import it.fasm.pokemoncard.databinding.FragmentCardListBinding
 import it.fasm.pokemoncard.databinding.FragmentSetsBinding
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
+import it.fasm.pokemoncard.dbManager.DeckDb
 import it.fasm.pokemoncard.model.Card
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +47,7 @@ class CardListFragment : Fragment() {
     private var numPref = ""
     private var numberCards = ""
     private var releaseDate = ""
+    private var deckList =  ArrayList<DeckDb>()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

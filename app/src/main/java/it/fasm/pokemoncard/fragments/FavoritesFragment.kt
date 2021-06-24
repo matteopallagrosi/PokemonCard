@@ -21,6 +21,7 @@ import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.FragmentFavoritesBinding
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.dbManager.DeckDb
+import it.fasm.pokemoncard.viewModel.deckList
 import kotlinx.coroutines.*
 import kotlin.random.Random
 
@@ -32,17 +33,16 @@ class FavoritesFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var vibe: Vibrator
 
-
     private val deckTypes = listOf("icon_tcgo_expanded", "icon_tcgo_legacy", "icon_tcgo_overall", "icon_tcgo_themedeck", "icon_tcgo_standard")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vibe = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-//replace yourActivity.this with your own activity or if you declared a context you can write context.getSystemService(Context.VIBRATOR_SERVICE);
-
-
     }
+
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
@@ -63,39 +63,10 @@ class FavoritesFragment : Fragment() {
             println(i)
             addItem(i)
         }
-        /* val view = binding.root
-        val cancelText = "<font color='#000000'>Cancel</font>"
-        var result: Long = 0
-        var deckName: String = ""
-        binding.btnAdd.setOnClickListener(){
-            var dialog = MaterialDialog(requireContext()).show {
-                input { dialog, text ->
-                    job = CoroutineScope(Dispatchers.IO).launch {
-                        val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
-                        result = cardDao.addDeck(DeckDb(text.toString()))
-                        deckName = text.toString()
-                    }
-
-                    runBlocking {
-                        job.join()
-                    }
-                    if (result == -1L) {
-                         var toast = Toast.makeText(requireContext(), "Name already exists", Toast.LENGTH_LONG)
-                         toast.setGravity(Gravity.BOTTOM, 0, 200)
-                         toast.show()
-                        }
-                    else
-                        addItem(deckName)
-                }
-                positiveButton(R.string.submit)
-                title(R.string.deckname)
-                negativeButton(text = Html.fromHtml(cancelText))
-            }
-
-        } */
 
         return binding.root
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

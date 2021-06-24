@@ -21,7 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
+class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context /*lista deck*/): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
     inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         var card: Card = Card()
@@ -32,6 +32,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
 
         var cardImage = binding.ivCard
         var star = binding.ivstar
+
 
     }
 
@@ -66,9 +67,9 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         }
         holder.star.setOnClickListener(){
             if (holder.card.favorites == false){
-                MaterialDialog(context).show {
-                    listItems(//la lista)
-                }
+                /* MaterialDialog(context).show {
+                    listItems(//la lista dei deck)
+                } */
                 holder.card.favorites = true
                 //aprire scelta deck
                 holder.star.setImageResource(R.drawable.star_on)
