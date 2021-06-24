@@ -20,4 +20,8 @@ interface CardDbDao {
 
     @Insert (onConflict = OnConflictStrategy.IGNORE)
     fun addDeck(deck: DeckDb): Long
+
+    @Query ("SELECT name FROM  deckdb")
+    fun decksaved(): List<String>
+
 }
