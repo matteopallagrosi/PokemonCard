@@ -21,11 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:animateLayoutChanges="true"
             android:isScrollContainer="false"
             app:columnCount="3"
-            app:columnOrderPreserved="false"
-            android:animateLayoutChanges="true"
-            />
+            app:columnOrderPreserved="true" />
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
