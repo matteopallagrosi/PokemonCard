@@ -156,7 +156,8 @@ class FavoritesFragment : Fragment() {
         }
 
         binding.layout.addView(newView, 0)
-        println(newView.id)
+        println(
+                newView.id)
         binding.layout.id
     }
 
@@ -165,6 +166,7 @@ class FavoritesFragment : Fragment() {
         val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
         CoroutineScope(Dispatchers.IO).launch {
             cardDao.removeDeck(DeckDb(deckName))
+            cardDao.removeCardDeck(deckName)
         }
 
     }
