@@ -1,5 +1,6 @@
 package it.fasm.pokemoncard.fragments
 
+import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SimpleOnItemTouchListener
 import it.fasm.pokemoncard.R
+import it.fasm.pokemoncard.adapters.CenterZoomAdapter
 import it.fasm.pokemoncard.adapters.SeriesAdapter
+import it.fasm.pokemoncard.animation.CenterZoomLayoutManager
 import it.fasm.pokemoncard.databinding.FragmentCardsBinding
 import it.fasm.pokemoncard.dbManager.CardDb
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
@@ -24,6 +27,10 @@ import kotlinx.coroutines.launch
 
 
 class CardsFragment : Fragment() {
+
+    /*private val centerImage = intArrayOf(R.drawable.pokemon_1, R.drawable.pokemon_2,R.drawable.pokemon_3,
+            R.drawable.pokemon_4,R.drawable.pokemon_5,
+            R.drawable.pokemon_6,R.drawable.pokemon_7,R.drawable.pokemon_8,R.drawable.pokemon_9)*/
 
     private var _binding: FragmentCardsBinding? = null
 
@@ -44,11 +51,14 @@ class CardsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         // Inflate the layout for this fragment
         _binding = FragmentCardsBinding.inflate(inflater, container, false)
         val view = binding.root
         binding.scrollCards.isHorizontalScrollBarEnabled = false
         var state = false
+
+        binding.CenterZoom
 
         binding.rvSeries.addOnItemTouchListener(object : SimpleOnItemTouchListener() {
             override fun onInterceptTouchEvent(view: RecyclerView, e: MotionEvent): Boolean {
@@ -69,6 +79,9 @@ class CardsFragment : Fragment() {
             i ++
         }
 
+        val centerAdapter = CenterZoomAdapter(requireContext())
+        binding.CenterZoom.layoutManager = CenterZoomLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.CenterZoom.adapter = centerAdapter
 
         binding.floatingActionButton3.setOnClickListener(){
             binding.floatingActionButton3.visibility  =View.INVISIBLE

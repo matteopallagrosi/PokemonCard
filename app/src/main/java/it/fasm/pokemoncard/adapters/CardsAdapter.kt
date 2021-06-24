@@ -66,9 +66,9 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         }
         holder.star.setOnClickListener(){
             if (holder.card.favorites == false){
-                MaterialDialog(context).show {
-                    listItems(//la lista)
-                }
+               // MaterialDialog(context).show {
+               //     listItems(//la lista)
+               // }
                 holder.card.favorites = true
                 //aprire scelta deck
                 holder.star.setImageResource(R.drawable.star_on)
