@@ -6,8 +6,11 @@ import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItems
 import it.fasm.pokemoncard.CardLargeFragment
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.CardLayoutBinding
@@ -63,7 +66,11 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         }
         holder.star.setOnClickListener(){
             if (holder.card.favorites == false){
+                MaterialDialog(context).show {
+                    listItems(//la lista)
+                }
                 holder.card.favorites = true
+                //aprire scelta deck
                 holder.star.setImageResource(R.drawable.star_on)
                 insertDataToDatabase(holder.card, images[holder.card.id])
                 println(holder.card.name + "aggiunta ai preferiti")

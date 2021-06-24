@@ -24,4 +24,7 @@ interface CardDbDao {
     @Query ("SELECT name FROM  deckdb")
     fun decksaved(): List<String>
 
+    @Delete
+    fun removeDeck(deck: DeckDb)
+
 }
