@@ -27,7 +27,11 @@ import com.google.gson.reflect.TypeToken
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.adapters.CardsAdapter
 import it.fasm.pokemoncard.databinding.FragmentSearchBinding
+import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.model.Card
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class SearchFragment : Fragment() {
@@ -41,24 +45,19 @@ class SearchFragment : Fragment() {
 
     private lateinit var queue : RequestQueue
     private lateinit var requestQueue : RequestQueue
+    private var deckList =  listOf("")
 
     val TAG1 = "CARD"
     val TAG2 = "IMAGE"
 
 
-
-/*
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-        var adapter = SeriesAdapter(requireContext())
-        binding.rvSeries.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvSeries.adapter = adapter
-
+        CoroutineScope(Dispatchers.IO).launch {
+            val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
+            deckList = cardDao.decksaved()
     }
-
- */
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -107,7 +106,7 @@ class SearchFragment : Fragment() {
 
 
         binding.rvcardsearch.layoutManager = GridLayoutManager(requireContext(), 3)
-        adapter = CardsAdapter(cards, cardImages, requireContext())
+        adapter = CardsAdapter(cards, cardImages, requireContext(), deckList)
         binding.rvcardsearch.adapter = adapter
 
 

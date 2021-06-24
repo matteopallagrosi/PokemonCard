@@ -47,7 +47,7 @@ class CardListFragment : Fragment() {
     private var numPref = ""
     private var numberCards = ""
     private var releaseDate = ""
-    private var deckList =  ArrayList<DeckDb>()
+    private var deckList =  listOf("")
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -92,7 +92,7 @@ class CardListFragment : Fragment() {
         }
 
         binding.rvCards.layoutManager = GridLayoutManager(this.context, 3)
-        adapter = CardsAdapter(cards, cardImages, requireContext())
+        adapter = CardsAdapter(cards, cardImages, requireContext(), deckList)
         binding.rvCards.adapter = adapter
 
         val spanCount = 3 // 3 columns
@@ -110,71 +110,15 @@ class CardListFragment : Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
+            deckList = cardDao.decksaved()
+        }
+
         val set = arguments?.getString("set")
         setUICard(set)
         super.onCreate(savedInstanceState)
     }
-
-
-     /* override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = FragmentCardListBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val set = intent.extras?.getString("set")
-        println(set)
-
-        class GridSpacingItemDecoration(
-            private val spanCount: Int,
-            private val spacing: Int,
-            private val includeEdge: Boolean
-        ) :
-            ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect,
-                view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
-            ) {
-
-                val position = parent.getChildAdapterPosition(view) // item position
-                val column = position % spanCount // item column
-                if (includeEdge) {
-                    outRect.left =
-                        spacing - column * spacing / spanCount // spacing - column * ((1f / spanCount) * spacing)
-                    outRect.right =
-                        (column + 1) * spacing / spanCount // (column + 1) * ((1f / spanCount) * spacing)
-                    if (position < spanCount) { // top edge
-                        outRect.top = spacing
-                    }
-                    outRect.bottom = spacing // item bottom
-                } else {
-                    outRect.left =
-                        column * spacing / spanCount // column * ((1f / spanCount) * spacing)
-                    outRect.right =
-                        spacing - (column + 1) * spacing / spanCount // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-                    if (position >= spanCount) {
-                        outRect.top = spacing // item top
-                    }
-                }
-            }
-
-        }
-
-
-        binding.rvCards.layoutManager = GridLayoutManager(this, 3)
-        adapter = CardsAdapter(cards, cardImages, this)
-        binding.rvCards.adapter = adapter
-
-        val spanCount = 3 // 3 columns
-
-        val spacing = 20 // 50px
-
-        val includeEdge = true
-        binding.rvCards.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
-
-        setUICard(set)
-    } */
 
     fun setUICard(set: String?) {
         var url = "https://api.pokemontcg.io/v2/cards?q=set.id:$set"

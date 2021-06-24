@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.fasm.pokemoncard.dbManager.DeckDb
 
-class deckList: ViewModel() {
+class DeckList: ViewModel() {
 
     private var list = MutableLiveData<MutableList<DeckDb>>()
 

@@ -12,16 +12,18 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
+import it.fasm.pokemoncard.CardListFragment
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.FragmentFavoritesBinding
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.dbManager.DeckDb
-import it.fasm.pokemoncard.viewModel.deckList
 import kotlinx.coroutines.*
 import kotlin.random.Random
 
@@ -125,17 +127,30 @@ class FavoritesFragment : Fragment() {
                             println("ciao!")
                         }
                     }
-                    cv.setOnLongClickListener(object : View.OnLongClickListener {
-                        override fun onLongClick(v: View?): Boolean {
-                            vibe.vibrate(80)
-                            if (it.id == R.id.btndelete) {
+                    if (it.id == R.id.btndelete) {
+                        cv.setOnLongClickListener(object : View.OnLongClickListener {
+                            override fun onLongClick(v: View?): Boolean {
+                                vibe.vibrate(80)
                                 if (it.visibility == View.GONE) it.visibility = View.VISIBLE
                                 else it.visibility = View.GONE
-                            }
 
-                            return true
+                                return true
+                            }
+                        })
+                    }
+
+                    if (it.id == R.id.tvdeckname && (it is TextView)) {
+                        cv.setOnClickListener { v->
+                            var activity = v.context as AppCompatActivity
+                            var cardDeckFragment = CardsDeckFragment()
+                            val bundle = bundleOf("deck" to it.text)
+                            cardDeckFragment.arguments = bundle
+                            activity.supportFragmentManager.beginTransaction()
+                                .replace(R.id.fragmentHost, cardDeckFragment)
+                                .addToBackStack(null).commit();
                         }
-                    })
+                    }
+
                 }
             }
         }

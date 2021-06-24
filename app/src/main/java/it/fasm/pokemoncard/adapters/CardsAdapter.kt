@@ -1,12 +1,10 @@
 package it.fasm.pokemoncard.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -17,11 +15,12 @@ import it.fasm.pokemoncard.databinding.CardLayoutBinding
 import it.fasm.pokemoncard.dbManager.CardDb
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.model.Card
+import it.fasm.pokemoncard.viewModel.DeckList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context /*lista deck*/): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
+class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context, var deckList: List<String>): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
     inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         var card: Card = Card()
@@ -67,14 +66,15 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         }
         holder.star.setOnClickListener(){
             if (holder.card.favorites == false){
-                /* MaterialDialog(context).show {
-                    listItems(//la lista dei deck)
-                } */
-                holder.card.favorites = true
-                //aprire scelta deck
-                holder.star.setImageResource(R.drawable.star_on)
-                insertDataToDatabase(holder.card, images[holder.card.id])
-                println(holder.card.name + "aggiunta ai preferiti")
+                 MaterialDialog(context).show {
+                    listItems(items = deckList) { dialog, index, text ->
+                        holder.card.favorites = true
+                        holder.star.setImageResource(R.drawable.star_on)
+                        insertDataToDatabase(holder.card, images[holder.card.id], text.toString())
+                        println(holder.card.name + "aggiunta ai preferiti")
+                    }
+                }
+
             } else {
                 holder.card.favorites = false
                 holder.star.setImageResource(R.drawable.star_off)
@@ -95,8 +95,8 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         return images.size
     }
 
-    private fun insertDataToDatabase(card: Card, image: Bitmap?){
-        var cardDb = CardDb(card.id, card.name, card.hp, card.tcgplayer.url, card.nationalPokedexNumbers!![0], card.rarity, card.set.id, image)
+    private fun insertDataToDatabase(card: Card, image: Bitmap?, deck: String){
+        var cardDb = CardDb(card.id, card.name, card.hp, card.tcgplayer.url, card.nationalPokedexNumbers!![0], card.rarity, card.set.id, image, deck)
         val cardDao = CardDbDatabase.getDatabase(this.context).getCardDbDao()
 
         CoroutineScope(Dispatchers.IO).launch {
