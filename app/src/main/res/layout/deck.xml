@@ -12,10 +12,12 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:longClickable="true"
+        android:paddingVertical="8dp"
+        app:cardCornerRadius="10dp"
         tools:cardBackgroundColor="#FFFFFF"
         tools:cardCornerRadius="10dp"
-        tools:contentPadding="8dp"
-        android:paddingVertical="8dp">
+        tools:contentPadding="8dp">
 
         <ImageView
             android:id="@+id/imageView14"
@@ -24,12 +26,33 @@
             app:srcCompat="@drawable/icon_tcgo_standard" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tvdeckname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="140dp"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvnumcards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="220dp"
             android:text="TextView" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btndelete"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="end"
+            android:clickable="true"
+            android:longClickable="false"
+            app:backgroundTint="@color/red_200"
+            app:fabCustomSize="20dp"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_close" />
 
     </androidx.cardview.widget.CardView>
 
