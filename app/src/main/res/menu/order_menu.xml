@@ -4,13 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="AlwaysShowAction">
     <item
-        android:id="@+id/searchFragment"
-        android:icon="@drawable/ic_baseline_reorder_24"
-        android:title="Order by">
-        <menu >
-            <item android:title="Name" />
-            <item android:title="Hp" />
-            <item android:title="Price" />
-        </menu>
-    </item>
+        android:id="@+id/name"
+        android:title="Order by name" />
+    <item
+        android:id="@+id/hp"
+        android:title="Order by HP" />
+    <item
+        android:id="@+id/price"
+        android:title="Order by Price" />
 </menu>

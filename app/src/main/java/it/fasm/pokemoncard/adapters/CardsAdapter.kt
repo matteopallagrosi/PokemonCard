@@ -58,10 +58,13 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
             if (holder.card.favorites == false){
                 MaterialDialog(context).show {
                     listItems(items = deckList) { dialog, index, text ->
-                        holder.card.favorites = true
-                        holder.star.setImageResource(R.drawable.star_on)
-                        insertDataToDatabase(holder.card, images[holder.card.id], text.toString())
-                        println(holder.card.name + "aggiunta ai preferiti")
+                        if (text.toString() == "You must create a deck first!") this.cancel()
+                        else {
+                            holder.card.favorites = true
+                            holder.star.setImageResource(R.drawable.star_on)
+                            insertDataToDatabase(holder.card, images[holder.card.id], text.toString())
+                            println(holder.card.name + "aggiunta ai preferiti")
+                        }
                     }
                 }
 

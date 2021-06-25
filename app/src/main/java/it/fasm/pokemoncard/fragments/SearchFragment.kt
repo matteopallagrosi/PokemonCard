@@ -30,15 +30,13 @@ import it.fasm.pokemoncard.adapters.CardsAdapter
 import it.fasm.pokemoncard.databinding.FragmentSearchBinding
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.model.Card
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.json.JSONObject
 
 class SearchFragment : Fragment() {
 
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentSearchBinding
+    //private val binding get() = _binding!!
 
     private lateinit var adapter: CardsAdapter
     private var cards = ArrayList<Card>()
@@ -55,7 +53,7 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         cont = requireContext()
-        CoroutineScope(Dispatchers.IO).launch {
+        val job: Job = CoroutineScope(Dispatchers.IO).launch {
             val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
             deckList = cardDao.decksaved()
         }
@@ -65,7 +63,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
         val view = binding.root
         queue = Volley.newRequestQueue(cont)
         requestQueue = Volley.newRequestQueue(cont)
@@ -107,7 +105,7 @@ class SearchFragment : Fragment() {
 
         }
 
-
+        if (deckList.size == 0) deckList = listOf("You must create a deck first!")
         binding.rvcardsearch.layoutManager = GridLayoutManager(cont, 3)
         adapter = CardsAdapter(cards, cardImages, cont, deckList)
         binding.rvcardsearch.adapter = adapter
@@ -124,12 +122,6 @@ class SearchFragment : Fragment() {
         toSearch()
 
         return view
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     fun toSearch(){

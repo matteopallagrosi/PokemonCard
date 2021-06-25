@@ -24,20 +24,23 @@ class CardsDeckFragment : Fragment() {
 
     private lateinit var binding: FragmentCardsDeckBinding
     private var cardList = listOf<CardDb>()
+    private lateinit var cont: Context
 
     private lateinit var vibe: Vibrator
+    var deck: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vibe = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        cont = requireContext()
+        vibe = cont.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         setHasOptionsMenu(true)
 
-        val deck = arguments?.getString("deck")
+        deck = arguments?.getString("deck")
         var job = CoroutineScope(Dispatchers.IO).launch {
-            val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
+            val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
             if (deck != null) {
-                cardList = cardDao.getCardsDeck(deck)
+                cardList = cardDao.getCardsDeck(deck!!)
             }
         }
         runBlocking {
@@ -140,6 +143,54 @@ class CardsDeckFragment : Fragment() {
         inflater.inflate(R.menu.order_menu, menu);
 
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.name ->{
+                val job = CoroutineScope(Dispatchers.IO).launch {
+                    val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
+                    cardList = cardDao.getOrderedByName(deck)
+                }
+                runBlocking {
+                    job.join()
+                }
+                binding.layout.removeAllViews()
+                for (card in cardList) {
+                    addItem(card)
+                }
+                true
+            }
+            R.id.hp -> {
+                val job = CoroutineScope(Dispatchers.IO).launch {
+                    val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
+                    cardList = cardDao.getOrderedByHp(deck)
+                }
+                runBlocking {
+                    job.join()
+                }
+                binding.layout.removeAllViews()
+                for (card in cardList) {
+                    addItem(card)
+                }
+                true
+            }
+            R.id.price -> {
+                val job = CoroutineScope(Dispatchers.IO).launch {
+                    val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
+                    cardList = cardDao.getOrderedByPrice(deck)
+                }
+                runBlocking {
+                    job.join()
+                }
+                binding.layout.removeAllViews()
+                for (card in cardList) {
+                    addItem(card)
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 
