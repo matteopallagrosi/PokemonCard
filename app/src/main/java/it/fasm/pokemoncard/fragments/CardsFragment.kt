@@ -69,8 +69,7 @@ class CardsFragment : Fragment() {
 
         var job = CoroutineScope(Dispatchers.IO).launch {
             val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
-            cards = cardDao.getCards()
-            println("dsfhsdhfkjsdhgfufufuyfyufuyfyufyufyu")
+            cards = cardDao.getLimitedCards()
         }
         runBlocking{
             job.join()

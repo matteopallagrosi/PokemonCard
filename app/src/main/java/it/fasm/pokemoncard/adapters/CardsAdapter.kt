@@ -64,6 +64,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
                             holder.star.setImageResource(R.drawable.star_on)
                             insertDataToDatabase(holder.card, images[holder.card.id], text.toString())
                             println(holder.card.name + "aggiunta ai preferiti")
+                            //incrementare numero stelle
                         }
                     }
                 }
