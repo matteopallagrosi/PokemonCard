@@ -2,6 +2,7 @@ package it.fasm.pokemoncard.adapters
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import it.fasm.pokemoncard.viewModel.DeckList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.Serializable
 
 class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context, var deckList: List<String>): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
@@ -45,6 +47,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         holder.card = cards[position]
         holder.cardImage.setImageBitmap(images[holder.card.id])
 
+
         CoroutineScope(Dispatchers.IO).launch {
             val cardDao = CardDbDatabase.getDatabase(context).getCardDbDao()
             if (cardDao.checkCard(holder.card.id) == 1){
@@ -59,7 +62,8 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
             println("Hai cliccato!")
             var activity = it.context as AppCompatActivity
             var cardLargeFragment = CardLargeFragment()
-            val bundle = bundleOf("card" to holder.card.id)
+            val bundle = Bundle()
+            bundle.putSerializable("card", holder.card)
             cardLargeFragment.arguments = bundle
             activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardLargeFragment)
                 .addToBackStack(null).commit();

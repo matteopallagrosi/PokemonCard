@@ -138,9 +138,9 @@ class FavoritesFragment : Fragment() {
                             }
                         })
                     }
-                    if (it.id == R.id.tvnumcards){
+                    /* if (it.id == R.id.tvnumcards){
                         it.numcards.text =
-                    }
+                    } */
 
                     if (it.id == R.id.tvdeckname && (it is TextView)) {
                         cv.setOnClickListener { v->

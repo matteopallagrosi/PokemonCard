@@ -32,24 +32,18 @@ class CardLargeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCardLargeBinding.inflate(layoutInflater, container, false)
 
-        val card = arguments?.getString("card")
-
-        setUIBigCard(card)
         return binding.root
     }
 
-    /* override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityCardLargeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val card = intent.extras?.getString("card")
-
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        val card = arguments?.getSerializable("card") as Card
+        println(card.name)
         setUIBigCard(card)
-    } */
+        super.onActivityCreated(savedInstanceState)
+    }
 
-    private fun setUIBigCard(card: String?) {
-        var url = "https://api.pokemontcg.io/v2/cards/$card"
+    private fun setUIBigCard(card: Card) {
+        /* var url = "https://api.pokemontcg.io/v2/cards/$card"
 
 
         // Instantiate the RequestQueue.
@@ -70,7 +64,7 @@ class CardLargeFragment : Fragment() {
                     val sType = object : TypeToken<Card>() { }.type
 
                     var card = gson.fromJson<Card>(ja.toString(), sType)
-                    println(card)
+                    println(card) */
 
                     setDescription(card)
 
@@ -86,7 +80,7 @@ class CardLargeFragment : Fragment() {
                                 Log.e("Volley", error.toString())
                             })
                     requestQueue.add(imageRequest)
-                },
+               /* },
                 Response.ErrorListener { error ->
                     println("Non ha funzionato")
                 }
@@ -98,7 +92,7 @@ class CardLargeFragment : Fragment() {
             }
         }
 
-        queue.add(jsonObjectRequest)
+        queue.add(jsonObjectRequest) */
     }
 
     private fun setDescription(card: Card) {
