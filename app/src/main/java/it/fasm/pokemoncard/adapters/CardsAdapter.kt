@@ -41,29 +41,8 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = CardLayoutBinding.inflate(layoutInflater, parent, false)
-        return ViewHolder(binding)
-    }
+        var holder = ViewHolder(binding)
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.card = cards[position]
-        holder.cardImage.setImageBitmap(images[holder.card.id])
-
-        holder.star.isEnabled = false
-
-        if (holder.card.downloaded == true) {
-            holder.star.isEnabled = true
-        }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val cardDao = CardDbDatabase.getDatabase(context).getCardDbDao()
-            if (cardDao.checkCard(holder.card.id) == 1){
-                holder.card.favorites = true
-            }
-        }
-
-
-        if (holder.card.favorites) holder.star.setImageResource(R.drawable.star_on)
-        else holder.star.setImageResource(R.drawable.star_off)
         holder.cardLayout.setOnClickListener {
             println("Hai cliccato!")
             var activity = it.context as AppCompatActivity
@@ -72,11 +51,12 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
             bundle.putSerializable("card", holder.card)
             cardLargeFragment.arguments = bundle
             activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardLargeFragment)
-                .addToBackStack(null).commit();
+                    .addToBackStack(null).commit();
         }
+
         holder.star.setOnClickListener(){
             if (holder.card.favorites == false){
-                 MaterialDialog(context).show {
+                MaterialDialog(context).show {
                     listItems(items = deckList) { dialog, index, text ->
                         holder.card.favorites = true
                         holder.star.setImageResource(R.drawable.star_on)
@@ -93,6 +73,66 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
             }
         }
 
+        return holder
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.card = cards[position]
+
+        holder.cardImage.setImageBitmap(images[holder.card.id])
+
+
+        holder.star.isEnabled = false
+
+        if (holder.card.downloaded == true) {
+            holder.star.isEnabled = true
+        }
+        /*
+
+        holder.cardLayout.setOnClickListener {
+            println("Hai cliccato!")
+            var activity = it.context as AppCompatActivity
+            var cardLargeFragment = CardLargeFragment()
+            val bundle = Bundle()
+            bundle.putSerializable("card", holder.card)
+            cardLargeFragment.arguments = bundle
+            activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardLargeFragment)
+                    .addToBackStack(null).commit();
+        }
+        */
+
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val cardDao = CardDbDatabase.getDatabase(context).getCardDbDao()
+            if (cardDao.checkCard(holder.card.id) == 1){
+                holder.card.favorites = true
+            }
+        }
+
+
+        if (holder.card.favorites) holder.star.setImageResource(R.drawable.star_on)
+        else holder.star.setImageResource(R.drawable.star_off)
+
+
+       /* holder.star.setOnClickListener(){
+            if (holder.card.favorites == false){
+                 MaterialDialog(context).show {
+                    listItems(items = deckList) { dialog, index, text ->
+                        holder.card.favorites = true
+                        holder.star.setImageResource(R.drawable.star_on)
+                        insertDataToDatabase(holder.card, images[holder.card.id], text.toString())
+                        println(holder.card.name + "aggiunta ai preferiti")
+                    }
+                }
+
+            } else {
+                holder.card.favorites = false
+                holder.star.setImageResource(R.drawable.star_off)
+                deleteDataFromDatabase(holder.card.id)
+                println(holder.card.name + "rimossa dai preferiti")
+            }
+        } */
+
         /*
         holder.cardLayout.setOnClickListener {
             println(holder.card.name)
@@ -106,7 +146,20 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
     }
 
     private fun insertDataToDatabase(card: Card, image: Bitmap?, deck: String){
-        var cardDb = CardDb(card.id, card.name, card.hp, card.tcgplayer.url, card.nationalPokedexNumbers!![0], card.rarity, card.set.id, image, deck)
+        var cardDb : CardDb
+        var price: Float? = 0.0f
+        if (card.tcgplayer.prices.normal.mid != null) {
+            price = card.tcgplayer.prices.normal.mid
+        }
+        else if (card.tcgplayer.prices.holofoil.mid != null){
+            price = card.tcgplayer.prices.holofoil.mid
+        }
+        else if (card.tcgplayer.prices.reverseHolofoil.mid != null){
+            price = card.tcgplayer.prices.reverseHolofoil.mid
+        }
+        cardDb = CardDb(card.id, card.name, card.hp, card.tcgplayer.url, card.nationalPokedexNumbers!![0], card.rarity, card.set.id, image, deck, price)
+
+
         val cardDao = CardDbDatabase.getDatabase(this.context).getCardDbDao()
 
         CoroutineScope(Dispatchers.IO).launch {

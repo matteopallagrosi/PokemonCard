@@ -8,14 +8,12 @@ import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.FragmentCardsDeckBinding
 import it.fasm.pokemoncard.dbManager.CardDb
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
-import it.fasm.pokemoncard.viewModel.CardLargeFavoritesFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -82,18 +80,17 @@ class CardsDeckFragment : Fragment() {
                 }
             })
 
-/*
             c.setOnClickListener(){v ->
                 var activity = v.context as AppCompatActivity
                 var cardLargeFavoritesFragment = CardLargeFavoritesFragment()
-                val bundle = bundleOf("card" to serializable cardDb)
+                val bundle = Bundle()
+                bundle.putSerializable("card", cardDb)
                 cardLargeFavoritesFragment.arguments = bundle
                 activity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentHost, cardLargeFavoritesFragment)
                     .addToBackStack(null).commit();
             }
 
- */
 
 
         }

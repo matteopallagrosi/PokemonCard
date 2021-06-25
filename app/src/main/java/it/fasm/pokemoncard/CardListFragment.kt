@@ -53,6 +53,7 @@ class CardListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCardListBinding.inflate(layoutInflater, container, false)
 
+
         //val set = arguments?.getString("set")
         binding.progressBar2.visibility = View.VISIBLE
 
@@ -120,6 +121,7 @@ class CardListFragment : Fragment() {
         setUICard(set)
         super.onCreate(savedInstanceState)
     }
+
 
     fun setUICard(set: String?) {
         var url = "https://api.pokemontcg.io/v2/cards?q=set.id:$set"

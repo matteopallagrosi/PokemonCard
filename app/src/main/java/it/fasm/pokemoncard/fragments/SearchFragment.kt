@@ -204,7 +204,6 @@ class SearchFragment : Fragment() {
 
         queue.cancelAll(TAG1)
         requestQueue.cancelAll(TAG2)
-        var count = 1
 
 
         val jsonObjectRequest = object : StringRequest(
@@ -238,11 +237,12 @@ class SearchFragment : Fragment() {
                         binding.tvNoresult.visibility = View.INVISIBLE
                     }
 
-                    for (card in cards) {
+                    for (i in 0..cards.size-1) {
+                        var card = cards[i]
                         val imageRequest = ImageRequest(card.images.large, {
                             cardImages[card.id] = it
                             card.downloaded = true
-                            adapter.notifyDataSetChanged()
+                            adapter.notifyItemChanged(i)
 
                         }, 0, 0,
                                 ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
