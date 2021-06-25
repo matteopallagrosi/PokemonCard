@@ -2,6 +2,7 @@ package it.fasm.pokemoncard.adapters
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -67,7 +68,8 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
             println("Hai cliccato!")
             var activity = it.context as AppCompatActivity
             var cardLargeFragment = CardLargeFragment()
-            val bundle = bundleOf("card" to holder.card.id)
+            val bundle = Bundle()
+            bundle.putSerializable("card", holder.card)
             cardLargeFragment.arguments = bundle
             activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardLargeFragment)
                 .addToBackStack(null).commit();

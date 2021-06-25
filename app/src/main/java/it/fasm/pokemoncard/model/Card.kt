@@ -31,5 +31,5 @@ data class Card(
     val ancientTrait: Ability? = null,
     var favorites: Boolean = false,
     var downloaded: Boolean = false
-)
+) : java.io.Serializable
 

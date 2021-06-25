@@ -37,18 +37,26 @@ class CardLargeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         val card = arguments?.getSerializable("card") as Card
-        println(card.name)
         setUIBigCard(card)
         super.onActivityCreated(savedInstanceState)
     }
+    /* override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityCardLargeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val card = intent.extras?.getString("card")
+
+        setUIBigCard(card)
+    } */
 
     private fun setUIBigCard(card: Card) {
-        /* var url = "https://api.pokemontcg.io/v2/cards/$card"
+        /*
+        var url = "https://api.pokemontcg.io/v2/cards/$card"
 
 
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(this.context)
-
 
         val jsonObjectRequest = object : StringRequest(Request.Method.GET, url,
                 Response.Listener{ response ->
@@ -64,7 +72,9 @@ class CardLargeFragment : Fragment() {
                     val sType = object : TypeToken<Card>() { }.type
 
                     var card = gson.fromJson<Card>(ja.toString(), sType)
-                    println(card) */
+                    println(card)
+
+         */
 
                     setDescription(card)
 
@@ -80,7 +90,7 @@ class CardLargeFragment : Fragment() {
                                 Log.e("Volley", error.toString())
                             })
                     requestQueue.add(imageRequest)
-               /* },
+        /*        },
                 Response.ErrorListener { error ->
                     println("Non ha funzionato")
                 }
@@ -92,7 +102,7 @@ class CardLargeFragment : Fragment() {
             }
         }
 
-        queue.add(jsonObjectRequest) */
+        queue.add(jsonObjectRequest)*/
     }
 
     private fun setDescription(card: Card) {
