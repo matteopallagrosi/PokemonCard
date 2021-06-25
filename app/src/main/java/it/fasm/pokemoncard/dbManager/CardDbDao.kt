@@ -45,6 +45,6 @@ interface CardDbDao {
     @Query("SELECT * FROM card WHERE deck = :deckName ORDER BY hp DESC")
     fun getOrderedByHp(deckName: String?) : List<CardDb>
 
-    @Query("SELECT * FROM card WHERE deck = :deckName ORDER BY price DESC")
+    @Query("SELECT * FROM card WHERE deck = :deckName ORDER BY price ASC")
     fun getOrderedByPrice(deckName: String?) : List<CardDb>
 }
