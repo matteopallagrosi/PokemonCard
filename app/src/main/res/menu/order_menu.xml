@@ -6,5 +6,11 @@
     <item
         android:id="@+id/searchFragment"
         android:icon="@drawable/ic_baseline_reorder_24"
-        android:title="Search" />
+        android:title="Order by">
+        <menu >
+            <item android:title="Name" />
+            <item android:title="Hp" />
+            <item android:title="Price" />
+        </menu>
+    </item>
 </menu>
