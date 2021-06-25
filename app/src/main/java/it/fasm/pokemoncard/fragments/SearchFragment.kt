@@ -1,6 +1,7 @@
 package it.fasm.pokemoncard.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
@@ -46,14 +47,16 @@ class SearchFragment : Fragment() {
     private lateinit var queue : RequestQueue
     private lateinit var requestQueue : RequestQueue
     private var deckList =  listOf("")
+    private lateinit var cont: Context
 
     val TAG1 = "CARD"
     val TAG2 = "IMAGE"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        cont = requireContext()
         CoroutineScope(Dispatchers.IO).launch {
-            val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
+            val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
             deckList = cardDao.decksaved()
         }
         super.onCreate(savedInstanceState)
@@ -64,8 +67,8 @@ class SearchFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val view = binding.root
-        queue = Volley.newRequestQueue(requireContext())
-        requestQueue = Volley.newRequestQueue(requireContext())
+        queue = Volley.newRequestQueue(cont)
+        requestQueue = Volley.newRequestQueue(cont)
 
         class GridSpacingItemDecoration(
                 private val spanCount: Int,
@@ -105,8 +108,8 @@ class SearchFragment : Fragment() {
         }
 
 
-        binding.rvcardsearch.layoutManager = GridLayoutManager(requireContext(), 3)
-        adapter = CardsAdapter(cards, cardImages, requireContext(), deckList)
+        binding.rvcardsearch.layoutManager = GridLayoutManager(cont, 3)
+        adapter = CardsAdapter(cards, cardImages, cont, deckList)
         binding.rvcardsearch.adapter = adapter
 
 
@@ -154,7 +157,7 @@ class SearchFragment : Fragment() {
 
 
         val spinner = binding.spinRarity
-        ArrayAdapter.createFromResource(requireContext(),
+        ArrayAdapter.createFromResource(cont,
                 R.array.rarity_string,
                 android.R.layout.simple_spinner_item
         ).also {
@@ -221,7 +224,7 @@ class SearchFragment : Fragment() {
                     cardImages.clear()
                     cards.clear()
                     cards.addAll(gson.fromJson<ArrayList<Card>>(ja.toString(), sType))
-                    val cardBack = BitmapFactory.decodeResource(requireContext().resources, R.drawable.card_back)
+                    val cardBack = BitmapFactory.decodeResource(cont.resources, R.drawable.card_back)
                     for (card in cards) {
                         cardImages[card.id] = cardBack
                     }

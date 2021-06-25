@@ -7,11 +7,25 @@
     android:background="@drawable/pattern"
     tools:context=".MainActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/CenterZoom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="true"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <HorizontalScrollView
         android:id="@+id/scrollCards"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -27,7 +41,7 @@
                 android:layout_height="118dp"
                 android:layout_weight="1"
                 android:alpha="0.8"
-                android:src="@drawable/pokemon_1" />
+                android:src="@drawable/pokemon1" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -107,10 +121,8 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
         android:text="Expansions"
         android:textAllCaps="true"
@@ -118,9 +130,11 @@
         android:textSize="24sp"
         android:textStyle="bold|italic"
         android:typeface="sans"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollCards" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.271" />
 
     <View
         android:id="@+id/divider2"
@@ -144,8 +158,10 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/scrollCards"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/card_back" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

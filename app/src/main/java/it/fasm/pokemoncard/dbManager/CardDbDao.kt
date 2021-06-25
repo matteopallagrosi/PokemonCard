@@ -35,4 +35,7 @@ interface CardDbDao {
 
     @Query ("SELECT COUNT(*) FROM card WHERE deck = :deckName")
     fun numFavInDeck(deckName: String): Int
+
+    @Query("SELECT * FROM card")
+    fun getCards(): List<CardDb>
 }
