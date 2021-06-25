@@ -34,6 +34,8 @@ class SetsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentSetsBinding.inflate(layoutInflater, container, false)
 
+        binding.progressBar3.visibility = View.VISIBLE
+
         val serie = arguments?.getString("serie")
 
         binding.rvSets.layoutManager = GridLayoutManager(this.context, 2)
@@ -85,6 +87,7 @@ class SetsFragment : Fragment() {
                         val imageRequest = ImageRequest(set.images.logo, {
                             logos[set.id] = it
                             println("OK")
+                            binding.progressBar3.visibility = View.INVISIBLE
                             adapter.notifyDataSetChanged()
                         }, 0, 0,
                                 ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,

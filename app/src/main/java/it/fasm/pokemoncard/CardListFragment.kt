@@ -54,6 +54,7 @@ class CardListFragment : Fragment() {
         binding = FragmentCardListBinding.inflate(layoutInflater, container, false)
 
         //val set = arguments?.getString("set")
+        binding.progressBar2.visibility = View.VISIBLE
 
         class GridSpacingItemDecoration(
                 private val spanCount: Int,
@@ -156,6 +157,9 @@ class CardListFragment : Fragment() {
                     binding.tvnumbercards.text = numberCards
                     binding.tvdate.text = releaseDate
                     binding.tvpreferites.text = numPref
+
+                    binding.progressBar2.visibility = View.INVISIBLE
+
                     adapter.notifyDataSetChanged()
                     val requestQueue = Volley.newRequestQueue(this.context)
                     for (card in cards) {

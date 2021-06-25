@@ -1,33 +1,23 @@
 package it.fasm.pokemoncard.fragments
 
 import android.content.Context
-import android.media.Image
 import android.os.Bundle
 import android.os.Vibrator
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.GridLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.os.bundleOf
 import androidx.core.view.children
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.fragment.app.Fragment
 import it.fasm.pokemoncard.R
-import it.fasm.pokemoncard.databinding.FragmentCardsBinding
 import it.fasm.pokemoncard.databinding.FragmentCardsDeckBinding
 import it.fasm.pokemoncard.dbManager.CardDb
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
-import it.fasm.pokemoncard.dbManager.DeckDb
-import it.fasm.pokemoncard.viewModel.CardLargeFavoritesFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+
 
 class CardsDeckFragment : Fragment() {
 
@@ -39,6 +29,8 @@ class CardsDeckFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vibe = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        setHasOptionsMenu(true)
 
         val deck = arguments?.getString("deck")
         var job = CoroutineScope(Dispatchers.IO).launch {
@@ -104,6 +96,7 @@ class CardsDeckFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentCardsDeckBinding.inflate(inflater, container, false)
 
+
         for (card in cardList) {
             addItem(card)
         }
@@ -134,5 +127,12 @@ class CardsDeckFragment : Fragment() {
         }
 
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.order_menu, menu);
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
 
 }

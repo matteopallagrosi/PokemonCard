@@ -192,6 +192,7 @@ class SearchFragment : Fragment() {
             url = url + " hp:" + "[" + minhp + " TO *]"
 
             //url = "https://api.pokemontcg.io/v2/cards?q=!rarity:\"Rare\""
+            binding.progressBar.visibility = View.VISIBLE
             println(url)
             setUICard(url)
         }
@@ -203,6 +204,7 @@ class SearchFragment : Fragment() {
 
         queue.cancelAll(TAG1)
         requestQueue.cancelAll(TAG2)
+
 
         val jsonObjectRequest = object : StringRequest(
                 Request.Method.GET, url,
@@ -223,6 +225,9 @@ class SearchFragment : Fragment() {
                     for (card in cards) {
                         cardImages[card.id] = cardBack
                     }
+
+                    binding.progressBar.visibility = View.INVISIBLE
+
                     adapter.notifyDataSetChanged()
                     println("size"+cards.size)
                     if (cards.size == 0){
