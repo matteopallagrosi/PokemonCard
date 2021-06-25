@@ -166,6 +166,7 @@ class CardListFragment : Fragment() {
                         val imageRequest = ImageRequest(card.images.large, {
                             cardImages[card.id] = it
                             println("OK")
+                            card.downloaded = true
                             adapter.notifyDataSetChanged()
 
                         }, 0, 0,
