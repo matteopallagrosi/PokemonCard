@@ -25,6 +25,7 @@ import it.fasm.pokemoncard.databinding.FragmentFavoritesBinding
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.dbManager.DeckDb
 import kotlinx.coroutines.*
+import java.lang.Thread.sleep
 import kotlin.random.Random
 
 
@@ -109,6 +110,8 @@ class FavoritesFragment : Fragment() {
 
         val newView: LinearLayout = this.layoutInflater.inflate(R.layout.deck, null) as LinearLayout
         val num =  Random.nextInt(deckTypes.size)
+        var job: Job
+
 
         newView.children.forEach { cv->
             if (cv is CardView) {
@@ -138,9 +141,17 @@ class FavoritesFragment : Fragment() {
                             }
                         })
                     }
-                    /* if (it.id == R.id.tvnumcards){
-                        it.numcards.text =
-                    } */
+                    if (it.id == R.id.tvnumcards && it is TextView){
+                        var numFav = 0
+                        job = CoroutineScope(Dispatchers.IO).launch {
+                            val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
+                            numFav = cardDao.numFavInDeck(deckName)
+                        }
+                        runBlocking {
+                            job.join()
+                        }
+                        it.text = "N. "+numFav.toString()
+                    }
 
                     if (it.id == R.id.tvdeckname && (it is TextView)) {
                         cv.setOnClickListener { v->

@@ -55,7 +55,7 @@ class SearchFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
             deckList = cardDao.decksaved()
-    }
+        }
         super.onCreate(savedInstanceState)
     }
 
@@ -121,7 +121,7 @@ class SearchFragment : Fragment() {
         toSearch()
 
         return view
-        }
+    }
 
 
     override fun onDestroyView() {
@@ -204,6 +204,7 @@ class SearchFragment : Fragment() {
 
         queue.cancelAll(TAG1)
         requestQueue.cancelAll(TAG2)
+        var count = 1
 
 
         val jsonObjectRequest = object : StringRequest(
@@ -240,6 +241,7 @@ class SearchFragment : Fragment() {
                     for (card in cards) {
                         val imageRequest = ImageRequest(card.images.large, {
                             cardImages[card.id] = it
+                            card.downloaded = true
                             adapter.notifyDataSetChanged()
 
                         }, 0, 0,

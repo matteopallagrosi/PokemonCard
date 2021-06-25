@@ -2,7 +2,6 @@ package it.fasm.pokemoncard.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.serialization.Serializable
 import org.jetbrains.annotations.NotNull
 
 data class Card(
@@ -30,6 +29,7 @@ data class Card(
     val resistances: List<Effect>? = null,
     val ability: Ability? = null,
     val ancientTrait: Ability? = null,
-    var favorites: Boolean = false
-) : java.io.Serializable
+    var favorites: Boolean = false,
+    var downloaded: Boolean = false
+)
 

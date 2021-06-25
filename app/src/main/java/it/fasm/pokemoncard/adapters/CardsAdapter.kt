@@ -2,10 +2,11 @@ package it.fasm.pokemoncard.adapters
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -20,7 +21,6 @@ import it.fasm.pokemoncard.viewModel.DeckList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.Serializable
 
 class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context, var deckList: List<String>): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
@@ -47,6 +47,11 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         holder.card = cards[position]
         holder.cardImage.setImageBitmap(images[holder.card.id])
 
+        holder.star.isEnabled = false
+
+        if (holder.card.downloaded == true) {
+            holder.star.isEnabled = true
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             val cardDao = CardDbDatabase.getDatabase(context).getCardDbDao()
@@ -62,8 +67,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
             println("Hai cliccato!")
             var activity = it.context as AppCompatActivity
             var cardLargeFragment = CardLargeFragment()
-            val bundle = Bundle()
-            bundle.putSerializable("card", holder.card)
+            val bundle = bundleOf("card" to holder.card.id)
             cardLargeFragment.arguments = bundle
             activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardLargeFragment)
                 .addToBackStack(null).commit();

@@ -33,4 +33,6 @@ interface CardDbDao {
     @Query ("DELETE FROM card WHERE deck = :deckName")
     fun removeCardDeck(deckName: String)
 
+    @Query ("SELECT COUNT(*) FROM card WHERE deck = :deckName")
+    fun numFavInDeck(deckName: String): Int
 }
