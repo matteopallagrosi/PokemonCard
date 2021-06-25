@@ -1,5 +1,6 @@
 package it.fasm.pokemoncard.model
 
+import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
@@ -30,6 +31,7 @@ data class Card(
     val ability: Ability? = null,
     val ancientTrait: Ability? = null,
     var favorites: Boolean = false,
-    var downloaded: Boolean = false
+    var downloaded: Boolean = false,
+    var imageDownloaded: Bitmap? = null
 ) : java.io.Serializable
 

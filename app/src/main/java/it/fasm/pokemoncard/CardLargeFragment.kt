@@ -78,6 +78,12 @@ class CardLargeFragment : Fragment() {
 
                     setDescription(card)
 
+                    binding.ivcardlarge.setImageBitmap(card.imageDownloaded)
+                    binding.ivcardlarge.visibility = View.VISIBLE
+
+
+
+/*
                     val requestQueue = Volley.newRequestQueue(this.context)
                     val imageRequest = ImageRequest(card.images.large, {
                         binding.ivcardlarge.setImageBitmap(it)
@@ -103,6 +109,8 @@ class CardLargeFragment : Fragment() {
         }
 
         queue.add(jsonObjectRequest)*/
+
+ */
     }
 
     private fun setDescription(card: Card) {

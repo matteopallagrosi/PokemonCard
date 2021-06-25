@@ -1,5 +1,6 @@
 package it.fasm.pokemoncard
 
+import android.content.Context
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -30,6 +31,12 @@ class SetsFragment : Fragment() {
     private lateinit var adapter: SetsAdapter
     private var sets = ArrayList<CardSet>()
     private var logos = HashMap<String, Bitmap>()
+    private lateinit var cont: Context
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        cont = requireContext()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentSetsBinding.inflate(layoutInflater, container, false)
@@ -38,8 +45,8 @@ class SetsFragment : Fragment() {
 
         val serie = arguments?.getString("serie")
 
-        binding.rvSets.layoutManager = GridLayoutManager(this.context, 2)
-        adapter = SetsAdapter(sets, logos, requireContext())
+        binding.rvSets.layoutManager = GridLayoutManager(cont, 2)
+        adapter = SetsAdapter(sets, logos, cont)
         binding.rvSets.adapter = adapter
 
         setUI(serie)
@@ -67,7 +74,7 @@ class SetsFragment : Fragment() {
     fun setUI(serie:String?) {
         var url = "https://api.pokemontcg.io/v2/sets?q=series:$serie"
 
-        val queue = Volley.newRequestQueue(this.context)
+        val queue = Volley.newRequestQueue(cont)
 
 
         val jsonObjectRequest = object : StringRequest(Request.Method.GET, url,
@@ -82,7 +89,7 @@ class SetsFragment : Fragment() {
                     val sType = object : TypeToken<ArrayList<CardSet>>() { }.type
 
                     sets.addAll(gson.fromJson<ArrayList<CardSet>>(ja.toString(), sType))
-                    val requestQueue = Volley.newRequestQueue(this.context)
+                    val requestQueue = Volley.newRequestQueue(cont)
                     for(set in sets) {
                         val imageRequest = ImageRequest(set.images.logo, {
                             logos[set.id] = it

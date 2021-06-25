@@ -242,6 +242,7 @@ class SearchFragment : Fragment() {
                         val imageRequest = ImageRequest(card.images.large, {
                             cardImages[card.id] = it
                             card.downloaded = true
+                            card.imageDownloaded = it
                             adapter.notifyItemChanged(i)
 
                         }, 0, 0,

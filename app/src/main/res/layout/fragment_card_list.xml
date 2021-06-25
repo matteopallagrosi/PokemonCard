@@ -108,9 +108,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:indeterminateTint="@color/red_200"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rvCards"
-        tools:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="@+id/rvCards" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

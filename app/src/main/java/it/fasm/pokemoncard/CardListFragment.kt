@@ -1,6 +1,7 @@
 package it.fasm.pokemoncard
 
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
@@ -48,14 +49,18 @@ class CardListFragment : Fragment() {
     private var numberCards = ""
     private var releaseDate = ""
     private var deckList =  listOf("")
+    private lateinit var cont: Context
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCardListBinding.inflate(layoutInflater, container, false)
 
 
+
         //val set = arguments?.getString("set")
-        binding.progressBar2.visibility = View.VISIBLE
+        if (cards.size == 0){
+            binding.progressBar2.visibility = View.VISIBLE
+        }
 
         class GridSpacingItemDecoration(
                 private val spanCount: Int,
@@ -93,7 +98,7 @@ class CardListFragment : Fragment() {
             }
         }
 
-        binding.rvCards.layoutManager = GridLayoutManager(this.context, 3)
+        binding.rvCards.layoutManager = GridLayoutManager(cont, 3)
         adapter = CardsAdapter(cards, cardImages, requireContext(), deckList)
         binding.rvCards.adapter = adapter
 
@@ -112,8 +117,9 @@ class CardListFragment : Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        cont = requireContext()
         CoroutineScope(Dispatchers.IO).launch {
-            val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
+            val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
             deckList = cardDao.decksaved()
         }
 
@@ -126,7 +132,7 @@ class CardListFragment : Fragment() {
     fun setUICard(set: String?) {
         var url = "https://api.pokemontcg.io/v2/cards?q=set.id:$set"
 
-        val queue = Volley.newRequestQueue(this.context)
+        val queue = Volley.newRequestQueue(cont)
 
 
         val jsonObjectRequest = object : StringRequest(
@@ -141,7 +147,7 @@ class CardListFragment : Fragment() {
 
                     val sType = object : TypeToken<ArrayList<Card>>() {}.type
                     var job = CoroutineScope(Dispatchers.IO).launch {
-                        val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
+                        val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                         if (set != null){
                             numPref = cardDao.numFavInSet(set).toString()
                         }
@@ -150,7 +156,7 @@ class CardListFragment : Fragment() {
                         job.join()
                     }
                     cards.addAll(gson.fromJson<ArrayList<Card>>(ja.toString(), sType))
-                    val cardBack = BitmapFactory.decodeResource(this.resources, R.drawable.card_back)
+                    val cardBack = BitmapFactory.decodeResource(cont.resources, R.drawable.card_back)
                     for (card in cards) {
                         cardImages[card.id] = cardBack
                     }
@@ -163,10 +169,11 @@ class CardListFragment : Fragment() {
                     binding.progressBar2.visibility = View.INVISIBLE
 
                     adapter.notifyDataSetChanged()
-                    val requestQueue = Volley.newRequestQueue(this.context)
+                    val requestQueue = Volley.newRequestQueue(cont)
                     for (card in cards) {
                         val imageRequest = ImageRequest(card.images.large, {
                             cardImages[card.id] = it
+                            card.imageDownloaded = it
                             println("OK")
                             card.downloaded = true
                             adapter.notifyDataSetChanged()
