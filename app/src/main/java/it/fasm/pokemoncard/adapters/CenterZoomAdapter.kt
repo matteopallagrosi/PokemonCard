@@ -1,6 +1,8 @@
 package it.fasm.pokemoncard.adapters
 
 import android.content.Context
+import android.os.Bundle
+import android.os.Vibrator
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,15 +15,16 @@ import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.CenterLayoutBinding
 import it.fasm.pokemoncard.databinding.FragmentCardsBinding
 import it.fasm.pokemoncard.dbManager.CardDb
+import it.fasm.pokemoncard.dbManager.CardDbDao
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.fragments.CardsFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
-class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCardsBinding, var cards : List<CardDb> ): RecyclerView.Adapter<CenterZoomAdapter.ViewHolder>() {
-
+class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCardsBinding, var cards : List<CardDb>): RecyclerView.Adapter<CenterZoomAdapter.ViewHolder>() {
 
 
     private val centerImage = intArrayOf(R.drawable.pokemon_1, R.drawable.pokemon_2,R.drawable.pokemon_3,
@@ -32,7 +35,7 @@ class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCards
 
         var card = binding.root
         var ivcenter = binding.ivCenter
-
+        var btnDel = binding.btnDel
 
     }
 
@@ -46,6 +49,15 @@ class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCards
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        //lateinit var vibe: Vibrator
+
+        var cardDao : CardDbDao? = null
+        var job = CoroutineScope(Dispatchers.IO).launch {
+            cardDao = CardDbDatabase.getDatabase(context).getCardDbDao()
+        }
+        runBlocking{
+            job.join()
+        }
 
         if (cards.isNotEmpty()){
 
@@ -68,8 +80,30 @@ class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCards
         })
 
 
+
         var pos = position +1
         val id = context.resources.getIdentifier("pokemon$pos", "drawable", context.packageName)
+
+
+
+        holder.ivcenter.setOnLongClickListener(object : View.OnLongClickListener {
+                override fun onLongClick(v: View?): Boolean {
+                    //vibe.vibrate(80)
+                    if (holder.btnDel.visibility == View.GONE) holder.btnDel.visibility = View.VISIBLE
+                    else holder.btnDel.visibility = View.GONE
+
+                    return true
+                }
+            })
+
+        holder.btnDel.setOnClickListener(){
+            var job = CoroutineScope(Dispatchers.IO).launch {cardDao?.deleteCard(cards[position].id)        }
+            runBlocking{
+                job.join()
+            }
+            holder.ivcenter.visibility= View.GONE
+            holder.btnDel.visibility = View.GONE
+                    }
 
         holder.ivcenter.setOnClickListener() {
             if (cards.isEmpty()){
