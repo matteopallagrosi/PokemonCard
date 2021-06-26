@@ -9,13 +9,13 @@ import androidx.room.PrimaryKey
 data class CardDb (
     @PrimaryKey
     val id: String = "",
-    val name: String = "",
+    val name: String? = "",
     val hp: Int? = null,
     val shop: String? = "",
     val pokedexNumber: Int? = 0,
     val rarity: String? = "",
     val idSet: String? = "",
     val image: Bitmap? = null,
-    val deck: String = "",
+    val deck: String? = "",
     val price: Float? = null
 ): java.io.Serializable

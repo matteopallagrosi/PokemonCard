@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context, var deckList: List<String>): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
-    private lateinit var listener: OnStarClickListener
+    private var listener: OnStarClickListener? = null
 
     inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         var card: Card = Card()
@@ -64,7 +64,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
                             insertDataToDatabase(holder.card, images[holder.card.id], text.toString())
                             println(holder.card.name + "aggiunta ai preferiti")
                             //incrementare numero stelle
-                            listener.onStarAdded()
+                            listener?.onStarAdded()
                         }
                     }
                 }
@@ -74,7 +74,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
                 holder.star.setImageResource(R.drawable.star_off)
                 deleteDataFromDatabase(holder.card.id)
                 println(holder.card.name + "rimossa dai preferiti")
-                listener.onStarRemoved()
+                listener?.onStarRemoved()
             }
         }
 
