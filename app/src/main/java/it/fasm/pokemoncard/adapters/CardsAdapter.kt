@@ -5,10 +5,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
@@ -18,12 +15,13 @@ import it.fasm.pokemoncard.databinding.CardLayoutBinding
 import it.fasm.pokemoncard.dbManager.CardDb
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.model.Card
-import it.fasm.pokemoncard.viewModel.DeckList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context, var deckList: List<String>): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
+
+    private lateinit var listener: OnStarClickListener
 
     inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         var card: Card = Card()
@@ -39,6 +37,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = CardLayoutBinding.inflate(layoutInflater, parent, false)
         var holder = ViewHolder(binding)
@@ -65,6 +64,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
                             insertDataToDatabase(holder.card, images[holder.card.id], text.toString())
                             println(holder.card.name + "aggiunta ai preferiti")
                             //incrementare numero stelle
+                            listener.onStarAdded()
                         }
                     }
                 }
@@ -74,11 +74,23 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
                 holder.star.setImageResource(R.drawable.star_off)
                 deleteDataFromDatabase(holder.card.id)
                 println(holder.card.name + "rimossa dai preferiti")
+                listener.onStarRemoved()
             }
         }
 
         return holder
     }
+
+    interface OnStarClickListener {
+        fun onStarAdded()
+
+        fun onStarRemoved()
+    }
+
+    fun setWhenClickListener(listener: OnStarClickListener) {
+        this.listener = listener
+    }
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.card = cards[position]

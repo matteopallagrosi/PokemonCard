@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,11 +25,8 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import it.fasm.pokemoncard.adapters.CardsAdapter
-import it.fasm.pokemoncard.adapters.SetsAdapter
 import it.fasm.pokemoncard.databinding.FragmentCardListBinding
-import it.fasm.pokemoncard.databinding.FragmentSetsBinding
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
-import it.fasm.pokemoncard.dbManager.DeckDb
 import it.fasm.pokemoncard.model.Card
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +35,7 @@ import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 
 
-class CardListFragment : Fragment() {
+class CardListFragment : Fragment(), CardsAdapter.OnStarClickListener {
 
     private lateinit var binding: FragmentCardListBinding
     private lateinit var adapter: CardsAdapter
@@ -99,8 +95,11 @@ class CardListFragment : Fragment() {
         }
 
         binding.rvCards.layoutManager = GridLayoutManager(cont, 3)
-        adapter = CardsAdapter(cards, cardImages, requireContext(), deckList)
+        adapter = CardsAdapter(cards, cardImages, cont, deckList)
+        adapter.setWhenClickListener(this)
         binding.rvCards.adapter = adapter
+
+
 
         val spanCount = 3 // 3 columns
 
@@ -126,6 +125,21 @@ class CardListFragment : Fragment() {
         val set = arguments?.getString("set")
         setUICard(set)
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onStarAdded() {
+        var num = numPref.toInt()
+        num++
+        numPref = num.toString()
+        binding.tvpreferites.text = numPref
+    }
+
+    override fun onStarRemoved() {
+        var num = numPref.toInt()
+        num--
+        numPref = num.toString()
+        binding.tvpreferites.text = numPref
+
     }
 
 
