@@ -35,7 +35,6 @@ class CardsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        // Inflate the layout for this fragment
         _binding = FragmentCardsBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -47,7 +46,6 @@ class CardsFragment : Fragment() {
         val adapter = SeriesAdapter(cont)
         binding.rvSeries.layoutManager = LinearLayoutManager(cont)
         binding.rvSeries.adapter = adapter
-
 
         return view
     }
@@ -65,7 +63,6 @@ class CardsFragment : Fragment() {
 
     private fun updateUI() {
         println(cards.size)
-        println("fatto!")
         cards = cards.takeLast(10)
         centerAdapter = CenterZoomAdapter(cont, binding, cards)
         binding.CenterZoom.adapter = centerAdapter

@@ -60,7 +60,7 @@ class SearchFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        // Inflate the layout for this fragment
+
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         val view = binding.root
         queue = Volley.newRequestQueue(cont)
@@ -184,7 +184,6 @@ class SearchFragment : Fragment() {
             }
             url = "$url hp:[$minhp TO *]"
 
-            //url = "https://api.pokemontcg.io/v2/cards?q=!rarity:\"Rare\""
             binding.progressBar.visibility = View.VISIBLE
             println(url)
             setUICard(url)
@@ -193,7 +192,6 @@ class SearchFragment : Fragment() {
 
 
     private fun setUICard(url: String) {
-        //var url = "https://api.pokemontcg.io/v2/cards?q=set.id:$set"
 
         queue.cancelAll(TAG1)
         requestQueue.cancelAll(TAG2)
@@ -205,7 +203,6 @@ class SearchFragment : Fragment() {
 
                     val jo = JSONObject(response)
                     val ja = jo.getJSONArray("data")
-                    println(ja.toString())
 
                     val gson = Gson()
 

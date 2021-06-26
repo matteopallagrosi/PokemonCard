@@ -101,26 +101,6 @@ class CardsDeckFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentCardsDeckBinding.inflate(inflater, container, false)
 
-
-        /* for (card in cardList) {
-            addItem(card)
-        } */
-
-        /*
-        var parem: GridLayout.LayoutParams = GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f), GridLayout.spec(GridLayout.UNDEFINED, 1f))
-
-        binding.layout.children.forEach {it ->
-            if (it.id == R.id.ivCard && it is ImageView) {
-                it.layoutParams = parem
-                parem.height = 100
-                it.layoutParams = parem
-                it.maxHeight = 80
-                it.maxWidth = 80
-            }
-        }
-         */
-
-
         return binding.root
     }
 
@@ -167,9 +147,6 @@ class CardsDeckFragment : Fragment() {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     cardList = cardDao.getOrderedByName(deck)
 
-                /*runBlocking {
-                    job.join()
-                }*/
                     launch(Dispatchers.Main) {
                         binding.progressBar4.visibility = View.GONE
                         binding.layout.removeAllViews()
@@ -185,9 +162,6 @@ class CardsDeckFragment : Fragment() {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     cardList = cardDao.getOrderedByHp(deck)
 
-                    /*runBlocking {
-                        job.join()
-                    }*/
                     launch(Dispatchers.Main) {
                         binding.progressBar4.visibility = View.GONE
                         binding.layout.removeAllViews()
@@ -203,9 +177,6 @@ class CardsDeckFragment : Fragment() {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     cardList = cardDao.getOrderedByPrice(deck)
 
-                    /*runBlocking {
-                        job.join()
-                    }*/
                     launch(Dispatchers.Main) {
                         binding.progressBar4.visibility = View.GONE
                         binding.layout.removeAllViews()

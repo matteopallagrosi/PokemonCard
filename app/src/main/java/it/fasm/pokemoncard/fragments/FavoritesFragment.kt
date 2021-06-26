@@ -48,7 +48,7 @@ class FavoritesFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
-        // Inflate the layout for this fragment
+
         val job: Job
         var decklist: List<String> = listOf("")
 
@@ -61,7 +61,6 @@ class FavoritesFragment : Fragment() {
         }
 
         for (i in decklist) {
-            println(i)
             addItem(i)
         }
 
@@ -125,7 +124,6 @@ class FavoritesFragment : Fragment() {
                     if (it.id == R.id.btndelete) {
                         it.setOnClickListener {
                             removeItem(it, deckName)
-                            println("ciao!")
                         }
                     }
                     if (it.id == R.id.btndelete) {

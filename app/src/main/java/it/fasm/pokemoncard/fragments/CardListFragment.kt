@@ -52,8 +52,6 @@ class CardListFragment : Fragment(), CardsAdapter.OnStarClickListener {
         binding = FragmentCardListBinding.inflate(layoutInflater, container, false)
 
 
-
-        //val set = arguments?.getString("set")
         if (cards.size == 0){
             binding.progressBar2.visibility = View.VISIBLE
         }
@@ -104,14 +102,13 @@ class CardListFragment : Fragment(), CardsAdapter.OnStarClickListener {
 
         val spanCount = 3 // 3 columns
 
-        val spacing = 20 // 50px
+        val spacing = 20 // 20px
 
         val includeEdge = true
         binding.rvCards.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         binding.tvnumbercards.text = numberCards
         binding.tvdate.text = releaseDate
         binding.tvpreferites.text = numPref
-        //setUICard(set)
 
         return binding.root
     }
@@ -140,7 +137,6 @@ class CardListFragment : Fragment(), CardsAdapter.OnStarClickListener {
         num--
         numPref = num.toString()
         binding.tvpreferites.text = numPref
-
     }
 
 
@@ -156,7 +152,6 @@ class CardListFragment : Fragment(), CardsAdapter.OnStarClickListener {
 
                     val jo = JSONObject(response)
                     val ja = jo.getJSONArray("data")
-                    println(ja.toString())
 
                     val gson = Gson()
 
@@ -189,7 +184,6 @@ class CardListFragment : Fragment(), CardsAdapter.OnStarClickListener {
                         val imageRequest = ImageRequest(card.images.large, {
                             cardImages[card.id] = it
                             card.imageDownloaded = it
-                            println("OK")
                             card.downloaded = true
                             adapter.notifyDataSetChanged()
 
