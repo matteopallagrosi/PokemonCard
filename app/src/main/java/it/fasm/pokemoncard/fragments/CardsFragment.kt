@@ -20,10 +20,7 @@ import it.fasm.pokemoncard.animation.CenterZoomLayoutManager
 import it.fasm.pokemoncard.databinding.FragmentCardsBinding
 import it.fasm.pokemoncard.dbManager.CardDb
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 
 class CardsFragment : Fragment() {
@@ -35,7 +32,7 @@ class CardsFragment : Fragment() {
     private var _binding: FragmentCardsBinding? = null
     private var cards = listOf<CardDb>()
     private val binding get() = _binding!!
-
+    private lateinit var centerAdapter: CenterZoomAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -75,7 +72,7 @@ class CardsFragment : Fragment() {
             job.join()
         }
 
-        val centerAdapter = CenterZoomAdapter(requireContext(), binding, cards)
+        centerAdapter = CenterZoomAdapter(requireContext(), binding, cards)
         binding.CenterZoom.layoutManager = CenterZoomLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.CenterZoom.adapter = centerAdapter
 
@@ -89,14 +86,11 @@ class CardsFragment : Fragment() {
         val adapter = SeriesAdapter(requireContext())
         binding.rvSeries.layoutManager = LinearLayoutManager(requireContext())
         binding.rvSeries.adapter = adapter
+
+
         return view
 
 
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 

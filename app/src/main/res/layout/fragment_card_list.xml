@@ -9,8 +9,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView3"
-        android:layout_width="110dp"
-        android:layout_height="80dp"
+        android:layout_width="330px"
+        android:layout_height="240px"
         android:layout_marginTop="16dp"
         app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,13 +24,13 @@
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="5dp"
             android:textAllCaps="false"
-            android:textSize="16dp"
+            android:textSize="50px"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/ivnumbercards"
             android:layout_width="match_parent"
-            android:layout_height="47dp"
+            android:layout_height="140px"
             android:layout_gravity="center|top"
             android:layout_marginTop="5dp"
             app:srcCompat="@drawable/two_cards" />
@@ -48,8 +48,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
-        android:layout_width="110dp"
-        android:layout_height="80dp"
+        android:layout_width="330px"
+        android:layout_height="240px"
         android:layout_marginTop="16dp"
         app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toStartOf="@+id/cardView3"
@@ -62,13 +62,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="5dp"
-            android:textSize="16dp"
+            android:textSize="50px"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/ivcalendar"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="140px"
             android:layout_gravity="center_horizontal|top"
             android:layout_marginTop="5dp"
             android:foregroundGravity="center"
@@ -76,18 +76,18 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="110dp"
-        android:layout_height="80dp"
+        android:layout_width="330px"
+        android:layout_height="240px"
         android:layout_marginTop="16dp"
         app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardView3"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imageView10"
             android:layout_width="match_parent"
-            android:layout_height="47dp"
+            android:layout_height="140px"
             android:layout_marginTop="5dp"
             app:srcCompat="@drawable/star_on" />
 
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="5dp"
-            android:textSize="16dp"
+            android:textSize="50px"
             android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 

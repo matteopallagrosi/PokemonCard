@@ -30,7 +30,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
             }
         var cardLayout = binding.root
 
-        var cardImage = binding.ivCard
+        var cardImage = binding.ivCardPref
         var star = binding.ivstar
 
 
@@ -173,7 +173,18 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         else if (card.tcgplayer.prices.reverseHolofoil.mid != null){
             price = card.tcgplayer.prices.reverseHolofoil.mid
         }
-        cardDb = CardDb(card.id, card.name, card.hp, card.tcgplayer.url, card.nationalPokedexNumbers!![0], card.rarity, card.set.id, image, deck, price)
+        println(card.id)
+        println(card.name)
+        println(card.hp)
+        println(card.tcgplayer.url)
+        println(card.nationalPokedexNumbers)
+        println(card.rarity)
+        println(card.set.id)
+        println(image)
+        println(deck)
+        println(price)
+
+        cardDb = CardDb(card.id, card.name, card.hp, card.tcgplayer.url, card.nationalPokedexNumbers?.get(0), card.rarity, card.set.id, image, deck, price)
 
 
         val cardDao = CardDbDatabase.getDatabase(this.context).getCardDbDao()

@@ -3,6 +3,7 @@ package it.fasm.pokemoncard.fragments
 import android.content.Context
 import android.os.Bundle
 import android.os.Vibrator
+import android.util.DisplayMetrics
 import android.view.*
 import android.widget.GridLayout
 import android.widget.ImageView
@@ -51,17 +52,22 @@ class CardsDeckFragment : Fragment() {
     private fun addItem(cardDb: CardDb){
 
         val newView: ConstraintLayout = this.layoutInflater.inflate(R.layout.card, null) as ConstraintLayout
-        var parem: GridLayout.LayoutParams = GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f), GridLayout.spec(GridLayout.UNDEFINED, 1f))
-        newView.layoutParams = parem
-        newView.children.forEach {
-            if (it.id == R.id.ivCard && it is ImageView) {
-                it.maxHeight = 80
-                it.maxWidth = 80
-            }
+
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        var width = displayMetrics.widthPixels
+
+        if ( width < 1080 ){
+            binding.layout.columnCount = 2
+        }
+        if ( width < 720) {
+            binding.layout.columnCount = 1
         }
 
+
+
         newView.children.forEach {c->
-            if (c.id == R.id.ivCard && c is ImageView)  c.setImageBitmap(cardDb.image)
+            if (c.id == R.id.ivCardPref && c is ImageView)  c.setImageBitmap(cardDb.image)
             c.setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
                     vibe.vibrate(80)

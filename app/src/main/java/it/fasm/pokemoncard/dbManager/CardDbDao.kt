@@ -39,7 +39,7 @@ interface CardDbDao {
     @Query("SELECT * FROM card")
     fun getCards(): List<CardDb>
 
-    @Query("SELECT * FROM card LIMIT 10")
+    @Query("SELECT * FROM card LIMIT 8")
     fun getLimitedCards(): List<CardDb>
 
     @Query("SELECT * FROM card WHERE deck = :deckName ORDER BY name DESC")
