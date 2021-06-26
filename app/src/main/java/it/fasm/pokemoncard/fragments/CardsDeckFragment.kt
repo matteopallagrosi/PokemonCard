@@ -147,6 +147,7 @@ class CardsDeckFragment : Fragment() {
                     }
                 }
                 launch(Dispatchers.Main) {
+                    binding.progressBar4.visibility = View.GONE
                     for (card in cardList) {
                         addItem(card)
                     }
@@ -171,6 +172,7 @@ class CardsDeckFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        binding.progressBar4.visibility = View.VISIBLE
         return when(item.itemId) {
             R.id.name ->{
                 CoroutineScope(Dispatchers.IO).launch {
@@ -181,6 +183,7 @@ class CardsDeckFragment : Fragment() {
                     job.join()
                 }*/
                     launch(Dispatchers.Main) {
+                        binding.progressBar4.visibility = View.GONE
                         binding.layout.removeAllViews()
                         for (card in cardList) {
                             addItem(card)
@@ -198,6 +201,7 @@ class CardsDeckFragment : Fragment() {
                         job.join()
                     }*/
                     launch(Dispatchers.Main) {
+                        binding.progressBar4.visibility = View.GONE
                         binding.layout.removeAllViews()
                         for (card in cardList) {
                             addItem(card)
@@ -215,6 +219,7 @@ class CardsDeckFragment : Fragment() {
                         job.join()
                     }*/
                     launch(Dispatchers.Main) {
+                        binding.progressBar4.visibility = View.GONE
                         binding.layout.removeAllViews()
                         for (card in cardList) {
                             addItem(card)
@@ -226,6 +231,4 @@ class CardsDeckFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
 }
