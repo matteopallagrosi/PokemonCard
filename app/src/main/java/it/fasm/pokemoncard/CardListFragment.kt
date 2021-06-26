@@ -94,6 +94,7 @@ class CardListFragment : Fragment(), CardsAdapter.OnStarClickListener {
             }
         }
 
+        if (deckList.size == 0) deckList = listOf("You must create a deck first!")
         binding.rvCards.layoutManager = GridLayoutManager(cont, 3)
         adapter = CardsAdapter(cards, cardImages, cont, deckList)
         adapter.setWhenClickListener(this)

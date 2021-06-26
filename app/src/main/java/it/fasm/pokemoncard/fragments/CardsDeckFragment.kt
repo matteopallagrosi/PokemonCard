@@ -38,7 +38,7 @@ class CardsDeckFragment : Fragment() {
         setHasOptionsMenu(true)
 
         deck = arguments?.getString("deck")
-        var job = CoroutineScope(Dispatchers.IO).launch {
+       /* var job = CoroutineScope(Dispatchers.IO).launch {
             val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
             if (deck != null) {
                 cardList = cardDao.getCardsDeck(deck!!)
@@ -46,65 +46,65 @@ class CardsDeckFragment : Fragment() {
         }
         runBlocking {
             job.join()
-        }
+        } */
     }
 
     private fun addItem(cardDb: CardDb){
 
-        val newView: ConstraintLayout = this.layoutInflater.inflate(R.layout.card, null) as ConstraintLayout
+        if (this.isAdded) {
+            val newView: ConstraintLayout = this.layoutInflater.inflate(R.layout.card, null) as ConstraintLayout
 
-        val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-        var width = displayMetrics.widthPixels
+            val displayMetrics = DisplayMetrics()
+            activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+            var width = displayMetrics.widthPixels
 
-        if ( width < 1080 ){
-            binding.layout.columnCount = 2
-        }
-        if ( width < 720) {
-            binding.layout.columnCount = 1
-        }
-
-
-
-        newView.children.forEach {c->
-            if (c.id == R.id.ivCardPref && c is ImageView)  c.setImageBitmap(cardDb.image)
-            c.setOnLongClickListener(object : View.OnLongClickListener {
-                override fun onLongClick(v: View?): Boolean {
-                    vibe.vibrate(80)
-                    newView.children.forEach {
-                        if (it.id == R.id.btnremove){
-                            if (it.visibility == View.GONE){
-                                it.visibility = View.VISIBLE
-                                it.setOnClickListener(){
-                                    removeItem(newView, cardDb.id)
-                                }
-                            }
-                            else {
-                                it.visibility = View.GONE
-                            }
-
-                        }
-                    }
-                    return true
-                }
-            })
-
-            c.setOnClickListener(){v ->
-                var activity = v.context as AppCompatActivity
-                var cardLargeFavoritesFragment = CardLargeFavoritesFragment()
-                val bundle = Bundle()
-                bundle.putSerializable("card", cardDb)
-                cardLargeFavoritesFragment.arguments = bundle
-                activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentHost, cardLargeFavoritesFragment)
-                    .addToBackStack(null).commit();
+            if (width < 1080) {
+                binding.layout.columnCount = 2
+            }
+            if (width < 720) {
+                binding.layout.columnCount = 1
             }
 
 
 
-        }
+            newView.children.forEach { c ->
+                if (c.id == R.id.ivCardPref && c is ImageView) c.setImageBitmap(cardDb.image)
+                c.setOnLongClickListener(object : View.OnLongClickListener {
+                    override fun onLongClick(v: View?): Boolean {
+                        vibe.vibrate(80)
+                        newView.children.forEach {
+                            if (it.id == R.id.btnremove) {
+                                if (it.visibility == View.GONE) {
+                                    it.visibility = View.VISIBLE
+                                    it.setOnClickListener() {
+                                        removeItem(newView, cardDb.id)
+                                    }
+                                } else {
+                                    it.visibility = View.GONE
+                                }
 
-        binding.layout.addView(newView, 0)
+                            }
+                        }
+                        return true
+                    }
+                })
+
+                c.setOnClickListener() { v ->
+                    var activity = v.context as AppCompatActivity
+                    var cardLargeFavoritesFragment = CardLargeFavoritesFragment()
+                    val bundle = Bundle()
+                    bundle.putSerializable("card", cardDb)
+                    cardLargeFavoritesFragment.arguments = bundle
+                    activity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentHost, cardLargeFavoritesFragment)
+                            .addToBackStack(null).commit();
+                }
+
+
+            }
+
+            binding.layout.addView(newView, 0)
+        }
 
     }
 
@@ -114,9 +114,9 @@ class CardsDeckFragment : Fragment() {
         binding = FragmentCardsDeckBinding.inflate(inflater, container, false)
 
 
-        for (card in cardList) {
+        /* for (card in cardList) {
             addItem(card)
-        }
+        } */
 
         /*
         var parem: GridLayout.LayoutParams = GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f), GridLayout.spec(GridLayout.UNDEFINED, 1f))
@@ -134,6 +134,25 @@ class CardsDeckFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+            var job = CoroutineScope(Dispatchers.IO).launch {
+                if(cardList.size == 0) {
+                    val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
+                    if (deck != null) {
+                        cardList = cardDao.getCardsDeck(deck!!)
+                    }
+                }
+                launch(Dispatchers.Main) {
+                    for (card in cardList) {
+                        addItem(card)
+                    }
+                }
+            }
+
     }
 
     private fun removeItem(view: View,id: String) {
