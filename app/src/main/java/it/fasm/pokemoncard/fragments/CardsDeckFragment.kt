@@ -173,44 +173,53 @@ class CardsDeckFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.name ->{
-                val job = CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     cardList = cardDao.getOrderedByName(deck)
-                }
-                runBlocking {
+
+                /*runBlocking {
                     job.join()
-                }
-                binding.layout.removeAllViews()
-                for (card in cardList) {
-                    addItem(card)
+                }*/
+                    launch(Dispatchers.Main) {
+                        binding.layout.removeAllViews()
+                        for (card in cardList) {
+                            addItem(card)
+                        }
+                    }
                 }
                 true
             }
             R.id.hp -> {
-                val job = CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     cardList = cardDao.getOrderedByHp(deck)
-                }
-                runBlocking {
-                    job.join()
-                }
-                binding.layout.removeAllViews()
-                for (card in cardList) {
-                    addItem(card)
+
+                    /*runBlocking {
+                        job.join()
+                    }*/
+                    launch(Dispatchers.Main) {
+                        binding.layout.removeAllViews()
+                        for (card in cardList) {
+                            addItem(card)
+                        }
+                    }
                 }
                 true
             }
             R.id.price -> {
-                val job = CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     cardList = cardDao.getOrderedByPrice(deck)
-                }
-                runBlocking {
-                    job.join()
-                }
-                binding.layout.removeAllViews()
-                for (card in cardList) {
-                    addItem(card)
+
+                    /*runBlocking {
+                        job.join()
+                    }*/
+                    launch(Dispatchers.Main) {
+                        binding.layout.removeAllViews()
+                        for (card in cardList) {
+                            addItem(card)
+                        }
+                    }
                 }
                 true
             }
