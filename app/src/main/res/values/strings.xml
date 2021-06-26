@@ -5,6 +5,10 @@
     <string name="submit">submit</string>
     <string name="deckname">Choose deck name</string>
     <string name="cancel">Cancel</string>
+    <string name="card_image">Card Image</string>
+    <string name="floating_botton">floating botton</string>
+    <string name="button">button</string>
+    <string name="floating_button">floating button</string>
 
 
 </resources>

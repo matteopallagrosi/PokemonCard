@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Vibrator
 import android.util.DisplayMetrics
 import android.view.*
-import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +17,6 @@ import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 class CardsDeckFragment : Fragment() {
@@ -38,15 +36,7 @@ class CardsDeckFragment : Fragment() {
         setHasOptionsMenu(true)
 
         deck = arguments?.getString("deck")
-       /* var job = CoroutineScope(Dispatchers.IO).launch {
-            val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
-            if (deck != null) {
-                cardList = cardDao.getCardsDeck(deck!!)
-            }
-        }
-        runBlocking {
-            job.join()
-        } */
+
     }
 
     private fun addItem(cardDb: CardDb){
@@ -56,7 +46,7 @@ class CardsDeckFragment : Fragment() {
 
             val displayMetrics = DisplayMetrics()
             activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-            var width = displayMetrics.widthPixels
+            val width = displayMetrics.widthPixels
 
             if (width < 1080) {
                 binding.layout.columnCount = 2
@@ -69,35 +59,33 @@ class CardsDeckFragment : Fragment() {
 
             newView.children.forEach { c ->
                 if (c.id == R.id.ivCardPref && c is ImageView) c.setImageBitmap(cardDb.image)
-                c.setOnLongClickListener(object : View.OnLongClickListener {
-                    override fun onLongClick(v: View?): Boolean {
-                        vibe.vibrate(80)
-                        newView.children.forEach {
-                            if (it.id == R.id.btnremove) {
-                                if (it.visibility == View.GONE) {
-                                    it.visibility = View.VISIBLE
-                                    it.setOnClickListener() {
-                                        removeItem(newView, cardDb.id)
-                                    }
-                                } else {
-                                    it.visibility = View.GONE
+                c.setOnLongClickListener {
+                    vibe.vibrate(80)
+                    newView.children.forEach {
+                        if (it.id == R.id.btnremove) {
+                            if (it.visibility == View.GONE) {
+                                it.visibility = View.VISIBLE
+                                it.setOnClickListener {
+                                    removeItem(newView, cardDb.id)
                                 }
-
+                            } else {
+                                it.visibility = View.GONE
                             }
-                        }
-                        return true
-                    }
-                })
 
-                c.setOnClickListener() { v ->
-                    var activity = v.context as AppCompatActivity
-                    var cardLargeFavoritesFragment = CardLargeFavoritesFragment()
+                        }
+                    }
+                    true
+                }
+
+                c.setOnClickListener { v ->
+                    val activity = v.context as AppCompatActivity
+                    val cardLargeFavoritesFragment = CardLargeFavoritesFragment()
                     val bundle = Bundle()
                     bundle.putSerializable("card", cardDb)
                     cardLargeFavoritesFragment.arguments = bundle
                     activity.supportFragmentManager.beginTransaction()
                             .replace(R.id.fragmentHost, cardLargeFavoritesFragment)
-                            .addToBackStack(null).commit();
+                            .addToBackStack(null).commit()
                 }
 
 
@@ -109,7 +97,7 @@ class CardsDeckFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentCardsDeckBinding.inflate(inflater, container, false)
 
@@ -140,7 +128,7 @@ class CardsDeckFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
             CoroutineScope(Dispatchers.IO).launch {
-                if(cardList.size == 0) {
+                if(cardList.isEmpty()) {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     if (deck != null) {
                         cardList = cardDao.getCardsDeck(deck!!)
@@ -166,7 +154,7 @@ class CardsDeckFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.order_menu, menu);
+        inflater.inflate(R.menu.order_menu, menu)
 
         super.onCreateOptionsMenu(menu, inflater)
     }

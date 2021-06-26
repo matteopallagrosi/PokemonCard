@@ -3,28 +3,19 @@ package it.fasm.pokemoncard.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import it.fasm.pokemoncard.R
+import androidx.fragment.app.Fragment
 import it.fasm.pokemoncard.databinding.FragmentCardLargeFavoritesBinding
-import it.fasm.pokemoncard.databinding.FragmentCardsDeckBinding
 import it.fasm.pokemoncard.dbManager.CardDb
-import it.fasm.pokemoncard.model.Card
 
 class CardLargeFavoritesFragment : Fragment() {
 
     private lateinit var binding: FragmentCardLargeFavoritesBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        var cardDb = arguments?.getSerializable("card") as CardDb
+        val cardDb = arguments?.getSerializable("card") as CardDb
         setDescription(cardDb)
         super.onActivityCreated(savedInstanceState)
     }
@@ -33,7 +24,7 @@ class CardLargeFavoritesFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+        savedInstanceState: Bundle?): View {
 
         binding = FragmentCardLargeFavoritesBinding.inflate(inflater, container, false)
 
@@ -43,20 +34,7 @@ class CardLargeFavoritesFragment : Fragment() {
 
     private fun setDescription(cardDb: CardDb) {
 
-        /*
-        if (card.tcgplayer.prices.normal.mid != null) {
-            binding.tvcardprice.text = card.tcgplayer.prices.normal.mid.toString() + "$"
-        }
-        else if (card.tcgplayer.prices.holofoil.mid != null){
-            binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
-        }
-        else if (card.tcgplayer.prices.reverseHolofoil.mid != null){
-            binding.tvcardprice.text = card.tcgplayer.prices.reverseHolofoil.mid.toString() + "$"
-        }
-        else {
-            binding.tvcardprice.text = "-"
-        }
-        */
+
 
         binding.ivcardlarge.setImageBitmap(cardDb.image)
 

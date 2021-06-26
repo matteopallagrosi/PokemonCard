@@ -19,13 +19,11 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
-import it.fasm.pokemoncard.CardListFragment
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.FragmentFavoritesBinding
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.dbManager.DeckDb
 import kotlinx.coroutines.*
-import java.lang.Thread.sleep
 import kotlin.random.Random
 
 
@@ -47,11 +45,11 @@ class FavoritesFragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
-        var job: Job = Job()
+        val job: Job
         var decklist: List<String> = listOf("")
 
         job = CoroutineScope(Dispatchers.IO).launch {
@@ -79,9 +77,9 @@ class FavoritesFragment : Fragment() {
         var result: Long = 0
         var deckName: String = ""
         var job: Job
-        binding.btnAdd.setOnClickListener() {
-            var dialog = MaterialDialog(requireContext()).show {
-                input { dialog, text ->
+        binding.btnAdd.setOnClickListener {
+            MaterialDialog(requireContext()).show {
+                input { _, text ->
                     job = CoroutineScope(Dispatchers.IO).launch {
                         val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
                         result = cardDao.addDeck(DeckDb(text.toString()))
@@ -92,7 +90,7 @@ class FavoritesFragment : Fragment() {
                         job.join()
                     }
                     if (result == -1L) {
-                        var toast = Toast.makeText(requireContext(), "Name already exists", Toast.LENGTH_LONG)
+                        val toast = Toast.makeText(requireContext(), "Name already exists", Toast.LENGTH_LONG)
                         toast.setGravity(Gravity.BOTTOM, 0, 200)
                         toast.show()
                     } else
@@ -125,21 +123,19 @@ class FavoritesFragment : Fragment() {
                         it.setImageResource(id)
                     }
                     if (it.id == R.id.btndelete) {
-                        it.setOnClickListener() {
+                        it.setOnClickListener {
                             removeItem(it, deckName)
                             println("ciao!")
                         }
                     }
                     if (it.id == R.id.btndelete) {
-                        cv.setOnLongClickListener(object : View.OnLongClickListener {
-                            override fun onLongClick(v: View?): Boolean {
-                                vibe.vibrate(80)
-                                if (it.visibility == View.GONE) it.visibility = View.VISIBLE
-                                else it.visibility = View.GONE
+                        cv.setOnLongClickListener {
+                            vibe.vibrate(80)
+                            if (it.visibility == View.GONE) it.visibility = View.VISIBLE
+                            else it.visibility = View.GONE
 
-                                return true
-                            }
-                        })
+                            true
+                        }
                     }
                     if (it.id == R.id.tvnumcards && it is TextView){
                         var numFav = 0
@@ -150,18 +146,18 @@ class FavoritesFragment : Fragment() {
                         runBlocking {
                             job.join()
                         }
-                        it.text = "N. "+numFav.toString()
+                        it.text = "N. $numFav"
                     }
 
                     if (it.id == R.id.tvdeckname && (it is TextView)) {
                         cv.setOnClickListener { v->
-                            var activity = v.context as AppCompatActivity
-                            var cardDeckFragment = CardsDeckFragment()
+                            val activity = v.context as AppCompatActivity
+                            val cardDeckFragment = CardsDeckFragment()
                             val bundle = bundleOf("deck" to it.text)
                             cardDeckFragment.arguments = bundle
                             activity.supportFragmentManager.beginTransaction()
                                 .replace(R.id.fragmentHost, cardDeckFragment)
-                                .addToBackStack(null).commit();
+                                .addToBackStack(null).commit()
                         }
                     }
 

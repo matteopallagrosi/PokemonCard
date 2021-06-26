@@ -1,19 +1,14 @@
 package it.fasm.pokemoncard.adapters
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.SetsFragment
-import it.fasm.pokemoncard.databinding.ActivityMainBinding
 import it.fasm.pokemoncard.databinding.SeriesLayoutBinding
 
 class SeriesAdapter(val context: Context): RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
@@ -45,12 +40,12 @@ class SeriesAdapter(val context: Context): RecyclerView.Adapter<SeriesAdapter.Vi
                 R.drawable.xy -> "XY"
                 else -> "Sun&Moon"
             }
-            var activity = it.context as AppCompatActivity
-            var setsFragment = SetsFragment()
+            val activity = it.context as AppCompatActivity
+            val setsFragment = SetsFragment()
             val bundle = bundleOf("serie" to serie)
             setsFragment.arguments = bundle
             activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, setsFragment)
-                .addToBackStack(null).commit();
+                .addToBackStack(null).commit()
         }
 
     }

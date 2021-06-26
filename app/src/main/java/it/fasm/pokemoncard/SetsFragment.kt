@@ -2,7 +2,6 @@ package it.fasm.pokemoncard
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,17 +10,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import it.fasm.pokemoncard.adapters.CardsAdapter
 import it.fasm.pokemoncard.adapters.SetsAdapter
 import it.fasm.pokemoncard.databinding.FragmentSetsBinding
-import it.fasm.pokemoncard.model.Card
 import it.fasm.pokemoncard.model.CardSet
 import org.json.JSONObject
 
@@ -38,7 +34,7 @@ class SetsFragment : Fragment() {
         cont = requireContext()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSetsBinding.inflate(layoutInflater, container, false)
 
         binding.progressBar3.visibility = View.VISIBLE
@@ -72,19 +68,19 @@ class SetsFragment : Fragment() {
     } */
 
     fun setUI(serie:String?) {
-        var url = "https://api.pokemontcg.io/v2/sets?q=series:$serie"
+        val url = "https://api.pokemontcg.io/v2/sets?q=series:$serie"
 
         val queue = Volley.newRequestQueue(cont)
 
 
-        val jsonObjectRequest = object : StringRequest(Request.Method.GET, url,
+        val jsonObjectRequest = object : StringRequest(Method.GET, url,
                 Response.Listener{ response ->
 
-                    var jo = JSONObject(response)
-                    var ja = jo.getJSONArray("data")
+                    val jo = JSONObject(response)
+                    val ja = jo.getJSONArray("data")
                     println(ja.toString())
 
-                    var gson = Gson()
+                    val gson = Gson()
 
                     val sType = object : TypeToken<ArrayList<CardSet>>() { }.type
 

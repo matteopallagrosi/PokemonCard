@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
-import it.fasm.pokemoncard.CardLargeFragment
+import it.fasm.pokemoncard.fragments.CardLargeFragment
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.CardLayoutBinding
 import it.fasm.pokemoncard.dbManager.CardDb
@@ -19,15 +19,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitmap>, val context: Context, var deckList: List<String>): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
+class CardsAdapter(val cards: ArrayList<Card>, private val images: HashMap<String, Bitmap>, val context: Context, private var deckList: List<String>): RecyclerView.Adapter<CardsAdapter.ViewHolder>() {
 
     private var listener: OnStarClickListener? = null
 
     inner class ViewHolder(binding: CardLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         var card: Card = Card()
-            set(value) {
-                field = value
-            }
         var cardLayout = binding.root
 
         var cardImage = binding.ivCardPref
@@ -40,23 +37,23 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
 
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = CardLayoutBinding.inflate(layoutInflater, parent, false)
-        var holder = ViewHolder(binding)
+        val holder = ViewHolder(binding)
 
         holder.cardLayout.setOnClickListener {
             println("Hai cliccato!")
-            var activity = it.context as AppCompatActivity
-            var cardLargeFragment = CardLargeFragment()
+            val activity = it.context as AppCompatActivity
+            val cardLargeFragment = CardLargeFragment()
             val bundle = Bundle()
             bundle.putSerializable("card", holder.card)
             cardLargeFragment.arguments = bundle
             activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardLargeFragment)
-                    .addToBackStack(null).commit();
+                    .addToBackStack(null).commit()
         }
 
-        holder.star.setOnClickListener(){
-            if (holder.card.favorites == false){
+        holder.star.setOnClickListener {
+            if (!holder.card.favorites){
                 MaterialDialog(context).show {
-                    listItems(items = deckList) { dialog, index, text ->
+                    listItems(items = deckList) { _, _, text ->
                         if (text.toString() == "You must create a deck first!") this.cancel()
                         else {
                             holder.card.favorites = true
@@ -100,22 +97,9 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
 
         holder.star.isEnabled = false
 
-        if (holder.card.downloaded == true) {
+        if (holder.card.downloaded) {
             holder.star.isEnabled = true
         }
-        /*
-
-        holder.cardLayout.setOnClickListener {
-            println("Hai cliccato!")
-            var activity = it.context as AppCompatActivity
-            var cardLargeFragment = CardLargeFragment()
-            val bundle = Bundle()
-            bundle.putSerializable("card", holder.card)
-            cardLargeFragment.arguments = bundle
-            activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardLargeFragment)
-                    .addToBackStack(null).commit();
-        }
-        */
 
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -130,31 +114,6 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         else holder.star.setImageResource(R.drawable.star_off)
 
 
-       /* holder.star.setOnClickListener(){
-            if (holder.card.favorites == false){
-                 MaterialDialog(context).show {
-                    listItems(items = deckList) { dialog, index, text ->
-                        holder.card.favorites = true
-                        holder.star.setImageResource(R.drawable.star_on)
-                        insertDataToDatabase(holder.card, images[holder.card.id], text.toString())
-                        println(holder.card.name + "aggiunta ai preferiti")
-                    }
-                }
-
-            } else {
-                holder.card.favorites = false
-                holder.star.setImageResource(R.drawable.star_off)
-                deleteDataFromDatabase(holder.card.id)
-                println(holder.card.name + "rimossa dai preferiti")
-            }
-        } */
-
-        /*
-        holder.cardLayout.setOnClickListener {
-            println(holder.card.name)
-        }
-        */
-
     }
 
     override fun getItemCount(): Int {
@@ -162,7 +121,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
     }
 
     private fun insertDataToDatabase(card: Card, image: Bitmap?, deck: String){
-        var cardDb : CardDb
+        val cardDb : CardDb
         var price: Float? = 0.0f
         if (card.tcgplayer.prices.normal.mid != null) {
             price = card.tcgplayer.prices.normal.mid
@@ -173,16 +132,8 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
         else if (card.tcgplayer.prices.reverseHolofoil.mid != null){
             price = card.tcgplayer.prices.reverseHolofoil.mid
         }
-        println(card.id)
-        println(card.name)
-        println(card.hp)
-        println(card.tcgplayer.url)
-        println(card.nationalPokedexNumbers)
-        println(card.rarity)
-        println(card.set.id)
-        println(image)
-        println(deck)
-        println(price)
+
+
 
         cardDb = CardDb(card.id, card.name, card.hp, card.tcgplayer.url, card.nationalPokedexNumbers?.get(0), card.rarity, card.set.id, image, deck, price)
 
@@ -191,7 +142,6 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
 
         CoroutineScope(Dispatchers.IO).launch {
             cardDao.addCard(cardDb)
-            println("aggiunto!")
         }
 
     }
@@ -201,7 +151,6 @@ class CardsAdapter(val cards: ArrayList<Card>, val images: HashMap<String, Bitma
 
         CoroutineScope(Dispatchers.IO).launch {
             cardDao.deleteCard(id)
-            println("rimosso!")
         }
     }
 }

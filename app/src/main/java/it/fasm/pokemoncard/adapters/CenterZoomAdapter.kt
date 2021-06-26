@@ -6,21 +6,15 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.CenterLayoutBinding
 import it.fasm.pokemoncard.databinding.FragmentCardsBinding
 import it.fasm.pokemoncard.dbManager.CardDb
-import it.fasm.pokemoncard.dbManager.CardDbDatabase
-import it.fasm.pokemoncard.fragments.CardsFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
-class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCardsBinding, var cards : List<CardDb> ): RecyclerView.Adapter<CenterZoomAdapter.ViewHolder>() {
+
+class CenterZoomAdapter(val context: Context, private var fragmentBinding: FragmentCardsBinding, var cards : List<CardDb> ): RecyclerView.Adapter<CenterZoomAdapter.ViewHolder>() {
 
 
 
@@ -53,14 +47,9 @@ class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCards
         }else{
             holder.ivcenter.setImageResource(centerImage[position])
         }
-        //var state = false
 
 
-
-        //holder.ivcenter.setImageBitmap(cards[position].image)
-
-
-        var state = false
+        val state = false
         fragmentBinding.rvSeries.addOnItemTouchListener(object : RecyclerView.SimpleOnItemTouchListener() {
             override fun onInterceptTouchEvent(view: RecyclerView, e: MotionEvent): Boolean {
                 return state
@@ -68,10 +57,10 @@ class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCards
         })
 
 
-        var pos = position +1
+        val pos = position +1
         val id = context.resources.getIdentifier("pokemon$pos", "drawable", context.packageName)
 
-        holder.ivcenter.setOnClickListener() {
+        holder.ivcenter.setOnClickListener {
             if (cards.isEmpty()){
                 fragmentBinding.ivcardforeground.setImageResource(id)}
             else{
@@ -79,22 +68,12 @@ class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCards
             }
 
             fragmentBinding.ivcardforeground.visibility = View.VISIBLE
-            //fragmentBinding.floatingActionButton3.visibility = View.VISIBLE
-            //state = true
         }
 
-        fragmentBinding.ivcardforeground.setOnClickListener(){
+        fragmentBinding.ivcardforeground.setOnClickListener {
             fragmentBinding.floatingActionButton3.visibility  =View.INVISIBLE
             fragmentBinding.ivcardforeground.visibility = View.INVISIBLE
         }
-
-        /*fragmentBinding.floatingActionButton3.setOnClickListener(){
-            fragmentBinding.floatingActionButton3.visibility  =View.INVISIBLE
-            fragmentBinding.ivcardforeground.visibility = View.INVISIBLE
-            fragmentBinding.rvSeries.suppressLayout(false)
-            println("fahsdifhsduhgidhg")
-            //state = false
-        }*/
 
     }
 
