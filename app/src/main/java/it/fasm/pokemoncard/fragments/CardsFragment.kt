@@ -1,5 +1,6 @@
 package it.fasm.pokemoncard.fragments
 
+import android.content.Context
 import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,6 +34,12 @@ class CardsFragment : Fragment() {
     private var cards = listOf<CardDb>()
     private val binding get() = _binding!!
     private lateinit var centerAdapter: CenterZoomAdapter
+    private lateinit var cont: Context
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        cont = requireContext()
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -64,16 +71,16 @@ class CardsFragment : Fragment() {
         }*/
 
 
-        var job = CoroutineScope(Dispatchers.IO).launch {
+        /*var job = CoroutineScope(Dispatchers.IO).launch {
             val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
             cards = cardDao.getLimitedCards()
         }
         runBlocking{
             job.join()
-        }
+        }*/
 
-        centerAdapter = CenterZoomAdapter(requireContext(), binding, cards)
-        binding.CenterZoom.layoutManager = CenterZoomLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        centerAdapter = CenterZoomAdapter(cont, binding, cards)
+        binding.CenterZoom.layoutManager = CenterZoomLayoutManager(cont, LinearLayoutManager.HORIZONTAL, false)
         binding.CenterZoom.adapter = centerAdapter
 
         /*binding.floatingActionButton3.setOnClickListener(){
@@ -83,14 +90,31 @@ class CardsFragment : Fragment() {
             state = false
         }*/
 
-        val adapter = SeriesAdapter(requireContext())
-        binding.rvSeries.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = SeriesAdapter(cont)
+        binding.rvSeries.layoutManager = LinearLayoutManager(cont)
         binding.rvSeries.adapter = adapter
 
 
         return view
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        CoroutineScope(Dispatchers.IO).launch {
+            val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
+            cards = cardDao.getCards()
+            launch(Dispatchers.Main) {
+                updateUI()
+            }
+        }
+    }
 
+    private fun updateUI() {
+        println(cards.size)
+        println("fatto!")
+        cards = cards.takeLast(10)
+        centerAdapter = CenterZoomAdapter(cont, binding, cards)
+        binding.CenterZoom.adapter = centerAdapter
     }
 
 

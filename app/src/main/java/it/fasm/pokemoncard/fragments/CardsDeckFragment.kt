@@ -139,7 +139,7 @@ class CardsDeckFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            var job = CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 if(cardList.size == 0) {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     if (deck != null) {
