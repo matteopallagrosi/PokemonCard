@@ -24,7 +24,7 @@ import kotlinx.coroutines.runBlocking
 class CardsDeckFragment : Fragment() {
 
     private lateinit var binding: FragmentCardsDeckBinding
-    private var cardList = listOf<CardDb>()
+    private var cardList = mutableListOf<CardDb>()
     private lateinit var cont: Context
 
     private lateinit var vibe: Vibrator
@@ -128,11 +128,16 @@ class CardsDeckFragment : Fragment() {
 
     private fun removeItem(view: View,id: String) {
         binding.layout.removeView(view)
+        var position: Int = 0
+        for (i in 0..(cardList.size-1)) {
+            if (cardList[i].id == id)
+                position =  i
+        }
+        cardList.removeAt(position)
         val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
         CoroutineScope(Dispatchers.IO).launch {
             cardDao.deleteCard(id)
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

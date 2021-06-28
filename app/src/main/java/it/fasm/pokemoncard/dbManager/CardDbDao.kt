@@ -28,7 +28,7 @@ interface CardDbDao {
     fun removeDeck(deck: DeckDb)
 
     @Query("SELECT * FROM card WHERE deck = :deckName")
-    fun getCardsDeck(deckName: String): List<CardDb>
+    fun getCardsDeck(deckName: String): MutableList<CardDb>
 
     @Query ("DELETE FROM card WHERE deck = :deckName")
     fun removeCardDeck(deckName: String)
@@ -43,11 +43,11 @@ interface CardDbDao {
     fun getLimitedCards(): List<CardDb>
 
     @Query("SELECT * FROM card WHERE deck = :deckName ORDER BY name DESC")
-    fun getOrderedByName(deckName: String?) : List<CardDb>
+    fun getOrderedByName(deckName: String?) : MutableList<CardDb>
 
     @Query("SELECT * FROM card WHERE deck = :deckName ORDER BY hp DESC")
-    fun getOrderedByHp(deckName: String?) : List<CardDb>
+    fun getOrderedByHp(deckName: String?) : MutableList<CardDb>
 
     @Query("SELECT * FROM card WHERE deck = :deckName ORDER BY price ASC")
-    fun getOrderedByPrice(deckName: String?) : List<CardDb>
+    fun getOrderedByPrice(deckName: String?) : MutableList<CardDb>
 }

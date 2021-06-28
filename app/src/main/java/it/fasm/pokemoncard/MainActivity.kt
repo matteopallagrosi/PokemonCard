@@ -22,8 +22,6 @@ import it.fasm.pokemoncard.fragments.*
 class MainActivity : AppCompatActivity(), SeriesAdapter.OnSerieClickListener, SetsAdapter.OnSetClickListener {
 
     private lateinit var binding:ActivityMainBinding
-    val setsFragment = SetsFragment()
-    val cardListFragment = CardListFragment()
     private lateinit var bottomNavigationView:  BottomNavigationView
 
 
