@@ -51,6 +51,7 @@ class CardsFragment : Fragment() {
         binding.CenterZoom.adapter = centerAdapter
 
         val adapter = SeriesAdapter(cont)
+        adapter.setListener(activity as SeriesAdapter.OnSerieClickListener)
         binding.rvSeries.layoutManager = LinearLayoutManager(cont)
         binding.rvSeries.adapter = adapter
 

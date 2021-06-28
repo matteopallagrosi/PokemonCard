@@ -47,6 +47,7 @@ class SetsFragment : Fragment() {
 
         binding.rvSets.layoutManager = GridLayoutManager(cont, 2)
         adapter = SetsAdapter(sets, logos, cont)
+        adapter.setListener(activity as SetsAdapter.OnSetClickListener)
         binding.rvSets.adapter = adapter
 
         setUI(serie)

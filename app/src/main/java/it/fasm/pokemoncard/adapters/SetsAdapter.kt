@@ -14,6 +14,7 @@ import it.fasm.pokemoncard.model.CardSet
 
 class SetsAdapter(val sets: ArrayList<CardSet>, val logos: HashMap<String,Bitmap>, val context: Context): RecyclerView.Adapter<SetsAdapter.ViewHolder>() {
 
+    private lateinit var listener: OnSetClickListener
 
     inner class ViewHolder(binding:SeriesLayoutBinding): RecyclerView.ViewHolder(binding.root) {
         var set: CardSet = CardSet()
@@ -35,18 +36,27 @@ class SetsAdapter(val sets: ArrayList<CardSet>, val logos: HashMap<String,Bitmap
         holder.set = sets[position]
         holder.logoSet.setImageBitmap(logos[holder.set.id])
         holder.card.setOnClickListener {
-            var activity = it.context as AppCompatActivity
-            var cardListFragment = CardListFragment()
-            val bundle = bundleOf("set" to holder.set.id)
-            cardListFragment.arguments = bundle
-            activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardListFragment)
-                .addToBackStack(null).commit();
+            //var activity = it.context as AppCompatActivity
+            //var cardListFragment = CardListFragment()
+            //val bundle = bundleOf("set" to holder.set.id)
+            //cardListFragment.arguments = bundle
+            //activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardListFragment)
+            //    .addToBackStack(null).commit();
+            listener.onSetClick(holder.set.id)
         }
 
     }
 
     override fun getItemCount(): Int {
         return logos.size
+    }
+
+    fun setListener(listener: OnSetClickListener) {
+        this.listener = listener
+    }
+
+    interface OnSetClickListener {
+        fun onSetClick(set: String)
     }
 
 }

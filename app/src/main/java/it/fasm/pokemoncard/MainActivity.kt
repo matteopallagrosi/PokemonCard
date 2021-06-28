@@ -2,6 +2,7 @@ package it.fasm.pokemoncard
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -13,17 +14,18 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import it.fasm.pokemoncard.adapters.SeriesAdapter
+import it.fasm.pokemoncard.adapters.SetsAdapter
 import it.fasm.pokemoncard.databinding.ActivityMainBinding
-import it.fasm.pokemoncard.fragments.CardsFragment
-import it.fasm.pokemoncard.fragments.FavoritesFragment
-import it.fasm.pokemoncard.fragments.SearchFragment
+import it.fasm.pokemoncard.fragments.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SeriesAdapter.OnSerieClickListener, SetsAdapter.OnSetClickListener {
 
     private lateinit var binding:ActivityMainBinding
-    val searchFragment = SearchFragment()
-    val cardFragment = CardsFragment()
-    val favoritesFragment = FavoritesFragment()
+    val setsFragment = SetsFragment()
+    val cardListFragment = CardListFragment()
+    private lateinit var bottomNavigationView:  BottomNavigationView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,19 +35,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         //val searchFragment = SearchFragment()
         //val cardFragment = CardsFragment()
         //val favoritesFragment = FavoritesFragment()
 
         bottomNavigationView.selectedItemId = R.id.cardsFragment
+        val cardFragment = CardsFragment()
+        val searchFragment = SearchFragment()
+        val favoritesFragment = FavoritesFragment()
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.cardsFragment-> setCurrentFragment(cardFragment)
-                R.id.searchFragment->setCurrentFragment(searchFragment)
-                R.id.favoritesFragment->setCurrentFragment(favoritesFragment)
+
+                R.id.cardsFragment-> {
+                    supportFragmentManager.findFragmentByTag("CARDLISTFRAGMENT")?.onDestroy()
+                    setCurrentFragment(cardFragment, "home")
+                }
+                R.id.searchFragment->setCurrentFragment(searchFragment, "search")
+                R.id.favoritesFragment->setCurrentFragment(favoritesFragment, "favorites")
 
             }
             true
@@ -73,9 +82,9 @@ class MainActivity : AppCompatActivity() {
         //prova()
     }
 
-    private fun setCurrentFragment(fragment: Fragment) {
+    private fun setCurrentFragment(fragment: Fragment, name: String) {
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragmentHost, fragment).addToBackStack(null).commit()
+            replace(R.id.fragmentHost, fragment).addToBackStack(name).commit()
         }
     }
 
@@ -121,4 +130,23 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    override fun onSerieClick(serie: String) {
+        println("eseguito!")
+        val setsFragment = SetsFragment()
+        val bundle = bundleOf("serie" to serie)
+        setsFragment.arguments = bundle
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, setsFragment, "SETSFRAGMENT")
+           .addToBackStack("sets").commit();
+    }
+
+    override fun onSetClick(set: String) {
+        println("lanciato")
+        val cardListFragment = CardListFragment()
+        val bundle = bundleOf("set" to set)
+        cardListFragment.arguments = bundle
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, cardListFragment, "CARDLISTFRAGMENT").addToBackStack("cardList").commit();
+    }
 }
+
+

@@ -88,7 +88,7 @@ class CardsDeckFragment : Fragment() {
                     cardLargeFavoritesFragment.arguments = bundle
                     activity.supportFragmentManager.beginTransaction()
                             .replace(R.id.fragmentHost, cardLargeFavoritesFragment)
-                            .addToBackStack(null).commit();
+                            .addToBackStack("cardLargeDeck").commit();
                 }
 
 

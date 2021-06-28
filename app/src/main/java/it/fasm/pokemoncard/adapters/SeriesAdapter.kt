@@ -13,6 +13,8 @@ import it.fasm.pokemoncard.databinding.SeriesLayoutBinding
 
 class SeriesAdapter(val context: Context): RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
 
+    private lateinit var listener: OnSerieClickListener
+
     private val series = intArrayOf(R.drawable.sun_moon, R.drawable.black_white,
             R.drawable.hearthgold, R.drawable.sword_shield, R.drawable.xy)
 
@@ -39,17 +41,26 @@ class SeriesAdapter(val context: Context): RecyclerView.Adapter<SeriesAdapter.Vi
                 R.drawable.xy -> "XY"
                 else -> "Sun&Moon"
             }
-            var activity = it.context as AppCompatActivity
-            var setsFragment = SetsFragment()
-            val bundle = bundleOf("serie" to serie)
-            setsFragment.arguments = bundle
-            activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, setsFragment)
-                .addToBackStack(null).commit();
+            //var activity = it.context as AppCompatActivity
+            //var setsFragment = SetsFragment()
+            //val bundle = bundleOf("serie" to serie)
+            //setsFragment.arguments = bundle
+            //activity.supportFragmentManager.beginTransaction().replace(R.id.fragmentHost, setsFragment)
+            //   .addToBackStack(null).commit();
+            listener.onSerieClick(serie)
         }
 
     }
 
     override fun getItemCount(): Int {
         return series.size
+    }
+
+    fun setListener(listener: OnSerieClickListener) {
+        this.listener = listener
+    }
+
+    interface OnSerieClickListener {
+        fun onSerieClick(serie: String)
     }
 }

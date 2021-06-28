@@ -157,7 +157,7 @@ class FavoritesFragment : Fragment() {
                             cardDeckFragment.arguments = bundle
                             activity.supportFragmentManager.beginTransaction()
                                 .replace(R.id.fragmentHost, cardDeckFragment)
-                                .addToBackStack(null).commit();
+                                .addToBackStack("cardsDeck").commit();
                         }
                     }
 
