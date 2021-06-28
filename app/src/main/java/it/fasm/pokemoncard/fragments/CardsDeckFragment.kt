@@ -56,8 +56,6 @@ class CardsDeckFragment : Fragment() {
                 binding.layout.columnCount = 1
             }
 
-
-
             newView.children.forEach { c ->
                 if (c.id == R.id.ivCardPref && c is ImageView) c.setImageBitmap(cardDb.image)
                 c.setOnLongClickListener(object : View.OnLongClickListener {
