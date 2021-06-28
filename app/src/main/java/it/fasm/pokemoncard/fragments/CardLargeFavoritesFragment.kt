@@ -43,21 +43,6 @@ class CardLargeFavoritesFragment : Fragment() {
 
     private fun setDescription(cardDb: CardDb) {
 
-        /*
-        if (card.tcgplayer.prices.normal.mid != null) {
-            binding.tvcardprice.text = card.tcgplayer.prices.normal.mid.toString() + "$"
-        }
-        else if (card.tcgplayer.prices.holofoil.mid != null){
-            binding.tvcardprice.text = card.tcgplayer.prices.holofoil.mid.toString() + "$"
-        }
-        else if (card.tcgplayer.prices.reverseHolofoil.mid != null){
-            binding.tvcardprice.text = card.tcgplayer.prices.reverseHolofoil.mid.toString() + "$"
-        }
-        else {
-            binding.tvcardprice.text = "-"
-        }
-        */
-
         binding.ivcardlarge.setImageBitmap(cardDb.image)
 
         if (cardDb.price != 0.0f){
@@ -80,7 +65,7 @@ class CardLargeFavoritesFragment : Fragment() {
 
         binding.cvcardlarge.setOnClickListener(){
             val url_tcg = cardDb.shop
-            val uri: Uri = Uri.parse(url_tcg) // missing 'http://' will cause crashed
+            val uri: Uri = Uri.parse(url_tcg)
 
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)

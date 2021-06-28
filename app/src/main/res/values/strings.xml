@@ -5,6 +5,12 @@
     <string name="submit">submit</string>
     <string name="deckname">Choose deck name</string>
     <string name="cancel">Cancel</string>
+    <string name="order_by_name">Order by name</string>
+    <string name="order_by_hp">Order by HP</string>
+    <string name="order_by_price">Order by Price</string>
+    <string name="search">Search</string>
+    <string name="cards">Cards</string>
+    <string name="favorites">Favorites</string>
 
 
 </resources>

@@ -19,13 +19,11 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
-import it.fasm.pokemoncard.CardListFragment
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.FragmentFavoritesBinding
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.dbManager.DeckDb
 import kotlinx.coroutines.*
-import java.lang.Thread.sleep
 import kotlin.random.Random
 
 
@@ -50,7 +48,6 @@ class FavoritesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
-        // Inflate the layout for this fragment
         var job: Job = Job()
         var decklist: List<String> = listOf("")
 
@@ -92,7 +89,7 @@ class FavoritesFragment : Fragment() {
                         job.join()
                     }
                     if (result == -1L) {
-                        var toast = Toast.makeText(requireContext(), "Name already exists", Toast.LENGTH_LONG)
+                        val toast = Toast.makeText(requireContext(), "Name already exists", Toast.LENGTH_LONG)
                         toast.setGravity(Gravity.BOTTOM, 0, 200)
                         toast.show()
                     } else
@@ -127,7 +124,6 @@ class FavoritesFragment : Fragment() {
                     if (it.id == R.id.btndelete) {
                         it.setOnClickListener() {
                             removeItem(it, deckName)
-                            println("ciao!")
                         }
                     }
                     if (it.id == R.id.btndelete) {
@@ -170,8 +166,7 @@ class FavoritesFragment : Fragment() {
         }
 
         binding.layout.addView(newView, 0)
-        println(
-                newView.id)
+        println(newView.id)
         binding.layout.id
     }
 

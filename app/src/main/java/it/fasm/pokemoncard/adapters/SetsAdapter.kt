@@ -1,14 +1,13 @@
 package it.fasm.pokemoncard.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
-import it.fasm.pokemoncard.CardListFragment
+import it.fasm.pokemoncard.fragments.CardListFragment
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.databinding.SeriesLayoutBinding
 import it.fasm.pokemoncard.model.CardSet

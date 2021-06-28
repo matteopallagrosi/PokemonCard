@@ -1,6 +1,6 @@
 package it.fasm.pokemoncard.fragments
 
-import android.app.Activity
+
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,13 +10,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.android.volley.*
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.StringRequest
@@ -25,53 +23,47 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import it.fasm.pokemoncard.R
 import it.fasm.pokemoncard.adapters.CardsAdapter
-import it.fasm.pokemoncard.databinding.FragmentSearchBinding
+import it.fasm.pokemoncard.databinding.FragmentCardListBinding
 import it.fasm.pokemoncard.dbManager.CardDbDatabase
 import it.fasm.pokemoncard.model.Card
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 
-class SearchFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchBinding
-    //private val binding get() = _binding!!
+class CardListFragment : Fragment(), CardsAdapter.OnStarClickListener {
 
+    private lateinit var binding: FragmentCardListBinding
     private lateinit var adapter: CardsAdapter
     private var cards = ArrayList<Card>()
-    private var cardImages = HashMap<String , Bitmap>()
-
-    private lateinit var queue : RequestQueue
-    private lateinit var requestQueue : RequestQueue
+    private var cardImages = HashMap<String ,Bitmap>()
+    private var numPref = ""
+    private var numberCards = ""
+    private var releaseDate = ""
     private var deckList =  listOf("")
     private lateinit var cont: Context
+    private lateinit var queue : RequestQueue
+    private lateinit var requestQueue : RequestQueue
 
     val TAG1 = "CARD"
     val TAG2 = "IMAGE"
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        cont = requireContext()
-        val job: Job = CoroutineScope(Dispatchers.IO).launch {
-            val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
-            deckList = cardDao.decksaved()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentCardListBinding.inflate(layoutInflater, container, false)
+
+        if (cards.size == 0){
+            binding.progressBar2.visibility = View.VISIBLE
         }
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
-        val view = binding.root
-        queue = Volley.newRequestQueue(cont)
-        requestQueue = Volley.newRequestQueue(cont)
 
         class GridSpacingItemDecoration(
                 private val spanCount: Int,
                 private val spacing: Int,
                 private val includeEdge: Boolean
         ) :
-                RecyclerView.ItemDecoration() {
+                ItemDecoration() {
             override fun getItemOffsets(
                     outRect: Rect,
                     view: View,
@@ -100,13 +92,13 @@ class SearchFragment : Fragment() {
                     }
                 }
             }
-
         }
 
         if (deckList.size == 0) deckList = listOf("You must create a deck first!")
-        binding.rvcardsearch.layoutManager = GridLayoutManager(cont, 3)
+        binding.rvCards.layoutManager = GridLayoutManager(cont, 3)
         adapter = CardsAdapter(cards, cardImages, cont, deckList)
-        binding.rvcardsearch.adapter = adapter
+        adapter.setWhenClickListener(this)
+        binding.rvCards.adapter = adapter
 
 
 
@@ -115,87 +107,47 @@ class SearchFragment : Fragment() {
         val spacing = 20 // 20px
 
         val includeEdge = true
-        binding.rvcardsearch.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
+        binding.rvCards.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
+        binding.tvnumbercards.text = numberCards
+        binding.tvdate.text = releaseDate
+        binding.tvpreferites.text = numPref
 
-        toSearch()
 
-        return view
+        return binding.root
     }
 
-    fun toSearch(){
-        var text : String
-        var minhp : String
-        var rarity: String
-
-        binding.seekBar.setProgress(0)
-        binding.seekBar.incrementProgressBy(10)
-        binding.seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                var value = progress%10
-                value = progress - value
-                binding.tvHp.text = value.toString()
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-            }
-        })
-
-
-        val spinner = binding.spinRarity
-        ArrayAdapter.createFromResource(cont,
-                R.array.rarity_string,
-                android.R.layout.simple_spinner_item
-        ).also {
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = it
+    override fun onCreate(savedInstanceState: Bundle?) {
+        cont = requireContext()
+        CoroutineScope(Dispatchers.IO).launch {
+            val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
+            deckList = cardDao.decksaved()
         }
+        queue = Volley.newRequestQueue(cont)
+        requestQueue = Volley.newRequestQueue(cont)
 
-        class SpinnerActivity : Activity(), AdapterView.OnItemSelectedListener {
+        val set = arguments?.getString("set")
+        setUICard(set)
+        super.onCreate(savedInstanceState)
+    }
 
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-                // An item was selected. You can retrieve the selected item using
-            }
+    override fun onStarAdded() {
+        var num = numPref.toInt()
+        num++
+        numPref = num.toString()
+        binding.tvpreferites.text = numPref
+    }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Another interface callback
-            }
-        }
+    override fun onStarRemoved() {
+        var num = numPref.toInt()
+        num--
+        numPref = num.toString()
+        binding.tvpreferites.text = numPref
 
-
-
-        binding.floatingActionButton.setOnClickListener(){
-            var id_spin = binding.spinRarity.getSelectedItemId().toInt()
-            rarity = binding.spinRarity.getItemAtPosition(id_spin).toString()
-            text = binding.etnameinput.text.toString()
-            minhp = binding.tvHp.text.toString()
-            println(rarity)
-            var url = "https://api.pokemontcg.io/v2/cards?q="
-
-            if (text != ""){
-                url = url + "name:" + text + "*"
-            }
-            if (rarity != "All"){
-                url = url + " !rarity:" + "\"" + rarity + "\""
-            }
-            url = url + " hp:" + "[" + minhp + " TO *]"
-
-            binding.progressBar.visibility = View.VISIBLE
-            println(url)
-            setUICard(url)
-        }
     }
 
 
-    fun setUICard(url: String) {
-
-        queue.cancelAll(TAG1)
-        requestQueue.cancelAll(TAG2)
-
+    fun setUICard(set: String?) {
+        var url = "https://api.pokemontcg.io/v2/cards?q=set.id:$set"
 
         val jsonObjectRequest = object : StringRequest(
                 Request.Method.GET, url,
@@ -207,33 +159,38 @@ class SearchFragment : Fragment() {
                     var gson = Gson()
 
                     val sType = object : TypeToken<ArrayList<Card>>() {}.type
-
-                    cardImages.clear()
-                    cards.clear()
+                    var job = CoroutineScope(Dispatchers.IO).launch {
+                        val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
+                        if (set != null){
+                            numPref = cardDao.numFavInSet(set).toString()
+                        }
+                    }
+                    runBlocking {
+                        job.join()
+                    }
                     cards.addAll(gson.fromJson<ArrayList<Card>>(ja.toString(), sType))
-                    val cardBack = BitmapFactory.decodeResource(cont.resources, R.drawable.card_back)
+                    val cardBack = BitmapFactory.decodeResource(cont.resources,
+                        R.drawable.card_back
+                    )
                     for (card in cards) {
                         cardImages[card.id] = cardBack
                     }
+                    numberCards = cards.size.toString()
+                    releaseDate = cards[0].set.releaseDate
+                    binding.tvnumbercards.text = numberCards
+                    binding.tvdate.text = releaseDate
+                    binding.tvpreferites.text = numPref
 
-                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.progressBar2.visibility = View.INVISIBLE
 
                     adapter.notifyDataSetChanged()
-                    println("size"+cards.size)
-                    if (cards.size == 0){
-                        binding.tvNoresult.visibility = View.VISIBLE
-                    }
-                    else {
-                        binding.tvNoresult.visibility = View.INVISIBLE
-                    }
-
-                    for (i in 0..cards.size-1) {
-                        var card = cards[i]
+                    for (card in cards) {
                         val imageRequest = ImageRequest(card.images.large, {
                             cardImages[card.id] = it
-                            card.downloaded = true
                             card.imageDownloaded = it
-                            adapter.notifyItemChanged(i)
+                            card.downloaded = true
+                            println("scaricato!")
+                            adapter.notifyDataSetChanged()
 
                         }, 0, 0,
                                 ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
@@ -269,10 +226,21 @@ class SearchFragment : Fragment() {
 
 
         })
+
         jsonObjectRequest.tag = TAG1
         queue.add(jsonObjectRequest)
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        queue.cancelAll(TAG1)
+        requestQueue.cancelAll(TAG2)
+        println("interrotto!")
+
+    }
 }

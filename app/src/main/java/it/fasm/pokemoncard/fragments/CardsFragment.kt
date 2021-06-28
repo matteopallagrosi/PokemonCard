@@ -26,9 +26,6 @@ import kotlinx.coroutines.*
 
 class CardsFragment : Fragment() {
 
-    /*private val centerImage = intArrayOf(R.drawable.pokemon_1, R.drawable.pokemon_2,R.drawable.pokemon_3,
-            R.drawable.pokemon_4,R.drawable.pokemon_5,
-            R.drawable.pokemon_6,R.drawable.pokemon_7,R.drawable.pokemon_8,R.drawable.pokemon_9)*/
 
     private var _binding: FragmentCardsBinding? = null
     private var cards = listOf<CardDb>()
@@ -44,56 +41,18 @@ class CardsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        // Inflate the layout for this fragment
+
         _binding = FragmentCardsBinding.inflate(inflater, container, false)
         val view = binding.root
-        //binding.scrollCards.isHorizontalScrollBarEnabled = false
-        //var state = false
 
-        /*
-        binding.rvSeries.addOnItemTouchListener(object : SimpleOnItemTouchListener() {
-            override fun onInterceptTouchEvent(view: RecyclerView, e: MotionEvent): Boolean {
-                return state
-            }
-        })
-
-        var i = 1
-        binding.layout.forEach {
-            val id = resources.getIdentifier("pokemon$i", "drawable", requireContext().packageName)
-
-            it.setOnClickListener(){
-                binding.ivcardforeground.setImageResource(id)
-                binding.ivcardforeground.visibility = View.VISIBLE
-                binding.floatingActionButton3.visibility = View.VISIBLE
-                state = true
-            }
-            i ++
-        }*/
-
-
-        /*var job = CoroutineScope(Dispatchers.IO).launch {
-            val cardDao = CardDbDatabase.getDatabase(requireContext()).getCardDbDao()
-            cards = cardDao.getLimitedCards()
-        }
-        runBlocking{
-            job.join()
-        }*/
 
         centerAdapter = CenterZoomAdapter(cont, binding, cards)
         binding.CenterZoom.layoutManager = CenterZoomLayoutManager(cont, LinearLayoutManager.HORIZONTAL, false)
         binding.CenterZoom.adapter = centerAdapter
 
-        /*binding.floatingActionButton3.setOnClickListener(){
-            binding.floatingActionButton3.visibility  =View.INVISIBLE
-            binding.ivcardforeground.visibility = View.INVISIBLE
-            binding.rvSeries.suppressLayout(false)
-            state = false
-        }*/
-
         val adapter = SeriesAdapter(cont)
         binding.rvSeries.layoutManager = LinearLayoutManager(cont)
         binding.rvSeries.adapter = adapter
-
 
         return view
     }
@@ -111,10 +70,13 @@ class CardsFragment : Fragment() {
 
     private fun updateUI() {
         println(cards.size)
-        println("fatto!")
         cards = cards.takeLast(10)
         centerAdapter = CenterZoomAdapter(cont, binding, cards)
         binding.CenterZoom.adapter = centerAdapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
 

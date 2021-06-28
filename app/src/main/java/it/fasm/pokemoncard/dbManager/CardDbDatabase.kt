@@ -7,34 +7,9 @@ import androidx.room.*
 @Database(entities = [CardDb::class, DeckDb::class], version = 1, exportSchema = true)
 @TypeConverters(Converters::class)
 abstract class CardDbDatabase : RoomDatabase (){
-/*
-    abstract fun cardDbDao() :CardDbDao
 
     companion object {
-        @Volatile
-        private var INSTANCE: CardDbDatabase? = null
-
-        fun getDatabase(context: Context): CardDbDatabase{
-            val tempInstance = INSTANCE
-            if (tempInstance != null){
-                return tempInstance
-            }
-            synchronized(this){
-                val instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        CardDbDatabase::class.java,
-                        "card_database"
-                ).build()
-                INSTANCE = instance
-                return instance
-            }
-        }
-    }
-
- */
-
-    companion object {
-        private var db: CardDbDatabase? = null // Singleton
+        private var db: CardDbDatabase? = null
 
         fun getDatabase(context: Context): CardDbDatabase {
             if (db == null)

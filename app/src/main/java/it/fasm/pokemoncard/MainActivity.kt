@@ -21,6 +21,9 @@ import it.fasm.pokemoncard.fragments.SearchFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityMainBinding
+    val searchFragment = SearchFragment()
+    val cardFragment = CardsFragment()
+    val favoritesFragment = FavoritesFragment()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,16 +34,16 @@ class MainActivity : AppCompatActivity() {
 
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        val searchFragment = SearchFragment()
-        val cardFragment = CardsFragment()
-        val favoritesFragment = FavoritesFragment()
+        //val searchFragment = SearchFragment()
+        //val cardFragment = CardsFragment()
+        //val favoritesFragment = FavoritesFragment()
 
         bottomNavigationView.selectedItemId = R.id.cardsFragment
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.cardsFragment->setCurrentFragment(cardFragment)
+                R.id.cardsFragment-> setCurrentFragment(cardFragment)
                 R.id.searchFragment->setCurrentFragment(searchFragment)
                 R.id.favoritesFragment->setCurrentFragment(favoritesFragment)
 
@@ -70,11 +73,11 @@ class MainActivity : AppCompatActivity() {
         //prova()
     }
 
-    private fun setCurrentFragment(fragment: Fragment) =
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.fragmentHost,fragment)
-                commit()
-            }
+    private fun setCurrentFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragmentHost, fragment).addToBackStack(null).commit()
+        }
+    }
 
 
     fun prova() {

@@ -5,11 +5,11 @@
     tools:ignore="AlwaysShowAction">
     <item
         android:id="@+id/name"
-        android:title="Order by name" />
+        android:title="@string/order_by_name" />
     <item
         android:id="@+id/hp"
-        android:title="Order by HP" />
+        android:title="@string/order_by_hp" />
     <item
         android:id="@+id/price"
-        android:title="Order by Price" />
+        android:title="@string/order_by_price" />
 </menu>

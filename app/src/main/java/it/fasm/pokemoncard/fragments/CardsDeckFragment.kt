@@ -38,15 +38,6 @@ class CardsDeckFragment : Fragment() {
         setHasOptionsMenu(true)
 
         deck = arguments?.getString("deck")
-       /* var job = CoroutineScope(Dispatchers.IO).launch {
-            val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
-            if (deck != null) {
-                cardList = cardDao.getCardsDeck(deck!!)
-            }
-        }
-        runBlocking {
-            job.join()
-        } */
     }
 
     private fun addItem(cardDb: CardDb){
@@ -90,8 +81,8 @@ class CardsDeckFragment : Fragment() {
                 })
 
                 c.setOnClickListener() { v ->
-                    var activity = v.context as AppCompatActivity
-                    var cardLargeFavoritesFragment = CardLargeFavoritesFragment()
+                    val activity = v.context as AppCompatActivity
+                    val cardLargeFavoritesFragment = CardLargeFavoritesFragment()
                     val bundle = Bundle()
                     bundle.putSerializable("card", cardDb)
                     cardLargeFavoritesFragment.arguments = bundle
@@ -110,28 +101,7 @@ class CardsDeckFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         binding = FragmentCardsDeckBinding.inflate(inflater, container, false)
-
-
-        /* for (card in cardList) {
-            addItem(card)
-        } */
-
-        /*
-        var parem: GridLayout.LayoutParams = GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f), GridLayout.spec(GridLayout.UNDEFINED, 1f))
-
-        binding.layout.children.forEach {it ->
-            if (it.id == R.id.ivCard && it is ImageView) {
-                it.layoutParams = parem
-                parem.height = 100
-                it.layoutParams = parem
-                it.maxHeight = 80
-                it.maxWidth = 80
-            }
-        }
-         */
-
 
         return binding.root
     }
@@ -179,9 +149,6 @@ class CardsDeckFragment : Fragment() {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     cardList = cardDao.getOrderedByName(deck)
 
-                /*runBlocking {
-                    job.join()
-                }*/
                     launch(Dispatchers.Main) {
                         binding.progressBar4.visibility = View.GONE
                         binding.layout.removeAllViews()
@@ -197,9 +164,6 @@ class CardsDeckFragment : Fragment() {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     cardList = cardDao.getOrderedByHp(deck)
 
-                    /*runBlocking {
-                        job.join()
-                    }*/
                     launch(Dispatchers.Main) {
                         binding.progressBar4.visibility = View.GONE
                         binding.layout.removeAllViews()
@@ -215,9 +179,6 @@ class CardsDeckFragment : Fragment() {
                     val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
                     cardList = cardDao.getOrderedByPrice(deck)
 
-                    /*runBlocking {
-                        job.join()
-                    }*/
                     launch(Dispatchers.Main) {
                         binding.progressBar4.visibility = View.GONE
                         binding.layout.removeAllViews()

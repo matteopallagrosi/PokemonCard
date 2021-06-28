@@ -53,14 +53,8 @@ class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCards
         }else{
             holder.ivcenter.setImageResource(centerImage[position])
         }
-        //var state = false
 
-
-
-        //holder.ivcenter.setImageBitmap(cards[position].image)
-
-
-        var state = false
+        val state = false
         fragmentBinding.rvSeries.addOnItemTouchListener(object : RecyclerView.SimpleOnItemTouchListener() {
             override fun onInterceptTouchEvent(view: RecyclerView, e: MotionEvent): Boolean {
                 return state
@@ -68,7 +62,7 @@ class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCards
         })
 
 
-        var pos = position +1
+        val pos = position +1
         val id = context.resources.getIdentifier("pokemon$pos", "drawable", context.packageName)
 
         holder.ivcenter.setOnClickListener() {
@@ -79,22 +73,12 @@ class CenterZoomAdapter(val context: Context, var fragmentBinding: FragmentCards
             }
 
             fragmentBinding.ivcardforeground.visibility = View.VISIBLE
-            //fragmentBinding.floatingActionButton3.visibility = View.VISIBLE
-            //state = true
         }
 
         fragmentBinding.ivcardforeground.setOnClickListener(){
             fragmentBinding.floatingActionButton3.visibility  =View.INVISIBLE
             fragmentBinding.ivcardforeground.visibility = View.INVISIBLE
         }
-
-        /*fragmentBinding.floatingActionButton3.setOnClickListener(){
-            fragmentBinding.floatingActionButton3.visibility  =View.INVISIBLE
-            fragmentBinding.ivcardforeground.visibility = View.INVISIBLE
-            fragmentBinding.rvSeries.suppressLayout(false)
-            println("fahsdifhsduhgidhg")
-            //state = false
-        }*/
 
     }
 
