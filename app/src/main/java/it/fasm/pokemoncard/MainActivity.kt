@@ -66,26 +66,6 @@ class MainActivity : AppCompatActivity(), SeriesAdapter.OnSerieClickListener, Se
                 }
                 true
             }
-
-            /* val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragmentHost) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        bottomNavigationView.setupWithNavController(navController) */
-
-
-            //cambia la barra superiore in base al fragment
-            /* val appBarConfig = AppBarConfiguration(
-            setOf(
-                R.id.cardsFragment,
-                R.id.searchFragment,
-                R.id.favoritesFragment
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfig) */
-
-
-            //prova()
     }
 
     private fun setCurrentFragment(fragment: Fragment, name: String) {
