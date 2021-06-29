@@ -1,6 +1,9 @@
 package it.fasm.pokemoncard
 
 import android.os.Bundle
+import android.transition.Explode
+import android.transition.Fade
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -28,45 +31,51 @@ class MainActivity : AppCompatActivity(), SeriesAdapter.OnSerieClickListener, Se
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        with(window) {
+            requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+
+            // set an enter transition
+            enterTransition = Fade()
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
-        bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        //val searchFragment = SearchFragment()
-        //val cardFragment = CardsFragment()
-        //val favoritesFragment = FavoritesFragment()
+            bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+            //val searchFragment = SearchFragment()
+            //val cardFragment = CardsFragment()
+            //val favoritesFragment = FavoritesFragment()
 
-        bottomNavigationView.selectedItemId = R.id.cardsFragment
-        val cardFragment = CardsFragment()
-        val searchFragment = SearchFragment()
-        val favoritesFragment = FavoritesFragment()
+            bottomNavigationView.selectedItemId = R.id.cardsFragment
+            val cardFragment = CardsFragment()
+            val searchFragment = SearchFragment()
+            val favoritesFragment = FavoritesFragment()
 
 
-        bottomNavigationView.setOnNavigationItemSelectedListener {
-            when(it.itemId){
+            bottomNavigationView.setOnNavigationItemSelectedListener {
+                when (it.itemId) {
 
-                R.id.cardsFragment-> {
-                    supportFragmentManager.findFragmentByTag("CARDLISTFRAGMENT")?.onDestroy()
-                    setCurrentFragment(cardFragment, "home")
+                    R.id.cardsFragment -> {
+                        supportFragmentManager.findFragmentByTag("CARDLISTFRAGMENT")?.onDestroy()
+                        setCurrentFragment(cardFragment, "home")
+                    }
+                    R.id.searchFragment -> setCurrentFragment(searchFragment, "search")
+                    R.id.favoritesFragment -> setCurrentFragment(favoritesFragment, "favorites")
+
                 }
-                R.id.searchFragment->setCurrentFragment(searchFragment, "search")
-                R.id.favoritesFragment->setCurrentFragment(favoritesFragment, "favorites")
-
+                true
             }
-            true
-        }
 
-        /* val navHostFragment =
+            /* val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentHost) as NavHostFragment
         val navController = navHostFragment.navController
 
         bottomNavigationView.setupWithNavController(navController) */
 
 
-        //cambia la barra superiore in base al fragment
-        /* val appBarConfig = AppBarConfiguration(
+            //cambia la barra superiore in base al fragment
+            /* val appBarConfig = AppBarConfiguration(
             setOf(
                 R.id.cardsFragment,
                 R.id.searchFragment,
@@ -76,8 +85,7 @@ class MainActivity : AppCompatActivity(), SeriesAdapter.OnSerieClickListener, Se
         setupActionBarWithNavController(navController, appBarConfig) */
 
 
-
-        //prova()
+            //prova()
     }
 
     private fun setCurrentFragment(fragment: Fragment, name: String) {

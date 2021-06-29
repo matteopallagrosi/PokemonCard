@@ -3,7 +3,7 @@
     package="it.fasm.pokemoncard">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PokemonCard">
-        <activity android:name=".MainActivity"
+        <activity android:name=".MainActivity"></activity>
+        <activity
+            android:name=".LaunchActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
