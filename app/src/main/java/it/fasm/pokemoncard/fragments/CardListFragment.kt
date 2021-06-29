@@ -142,7 +142,6 @@ class CardListFragment : Fragment(), CardsAdapter.OnStarClickListener {
         num--
         numPref = num.toString()
         binding.tvpreferites.text = numPref
-
     }
 
 
@@ -184,13 +183,14 @@ class CardListFragment : Fragment(), CardsAdapter.OnStarClickListener {
                     binding.progressBar2.visibility = View.INVISIBLE
 
                     adapter.notifyDataSetChanged()
-                    for (card in cards) {
+                    for (i in 0..cards.size-1) {
+                        var card = cards[i]
                         val imageRequest = ImageRequest(card.images.large, {
                             cardImages[card.id] = it
                             card.imageDownloaded = it
                             card.downloaded = true
                             println("scaricato!")
-                            adapter.notifyDataSetChanged()
+                            adapter.notifyItemChanged(i)
 
                         }, 0, 0,
                                 ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,

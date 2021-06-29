@@ -51,15 +51,19 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         cont = requireContext()
-        val job: Job = CoroutineScope(Dispatchers.IO).launch {
+        /*val job: Job = CoroutineScope(Dispatchers.IO).launch {
             val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
             deckList = cardDao.decksaved()
-        }
+        }*/
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        val job: Job = CoroutineScope(Dispatchers.IO).launch {
+            val cardDao = CardDbDatabase.getDatabase(cont).getCardDbDao()
+            deckList = cardDao.decksaved()
+        }
 
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         val view = binding.root

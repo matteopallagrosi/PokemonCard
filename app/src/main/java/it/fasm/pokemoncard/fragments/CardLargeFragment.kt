@@ -74,7 +74,7 @@ class CardLargeFragment : Fragment() {
         binding.tvrarity.text = card.rarity
 
 
-        binding.cvcardlarge.setOnClickListener(){
+        binding.cvcardlarge.setOnClickListener {
             val url_tcg = card.tcgplayer.url
             val uri: Uri = Uri.parse(url_tcg)
 
